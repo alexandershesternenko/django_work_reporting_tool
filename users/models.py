@@ -21,12 +21,12 @@ class CustomUser(AbstractUser):
     last_name = models.CharField(_("last name"), max_length=25)
     middle_name = models.CharField(_("middle name"), max_length=25, blank=True)
     email = models.EmailField(_("email address"), blank=True)
-    profession = models.ForeignKey(directory.Profession, on_delete=models.CASCADE)
-    struct_division = models.ForeignKey(directory.StructuralDivisions, on_delete=models.CASCADE)
+    profession = models.ForeignKey(directory.Profession, on_delete=models.CASCADE, blank=True, null=True)
+    struct_division = models.ForeignKey(directory.StructuralDivisions, on_delete=models.CASCADE, blank=True, null=True)
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
 
     def __repr__(self):
-        return self.last_name, self.first_name, self.middle_name, self.struct_division, self.profession
+        return self.last_name, self.first_name, self.middle_name
 
     def __str__(self):
-        return self.__repr__()
+        return str(self.__repr__())

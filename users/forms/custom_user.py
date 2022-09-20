@@ -1,16 +1,18 @@
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django import forms
 from ..models import CustomUser
 
 
-class CustomUserCreationForm(UserCreationForm):
-
-    class Meta(UserCreationForm):
-        model = CustomUser
-        fields = ('username', 'first_name', 'last_name', 'profession', 'struct_division', 'email')
-
-
-class CustomUserChangeForm(UserChangeForm):
-
+class CustomUserForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ('username', 'first_name', 'last_name', 'profession', 'struct_division', 'email')
+        fields = (
+            'username',
+            'password',
+            'last_name',
+            'first_name',
+            'middle_name',
+            'profession',
+            'struct_division',
+            'email',
+            'is_active',
+        )

@@ -1,15 +1,15 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-
-from .forms.custom_user import CustomUserCreationForm, CustomUserChangeForm
+from .forms.custom_user import CustomUserForm
 from .models import CustomUser
 
 
-class CustomUserAdmin(UserAdmin):
-    add_form = CustomUserCreationForm
-    form = CustomUserChangeForm
-    model = CustomUser
-    list_display = ['username', 'first_name', 'last_name', 'profession', 'struct_division', 'email', ]
+class CustomUserAdmin(admin.ModelAdmin):
+    form = CustomUserForm
+    list_display = ['username', 'last_name', 'first_name', 'middle_name',
+                    'id', 'profession', 'struct_division',
+                    'email', 'is_active', 'last_login', ]
+    list_filter = ('struct_division', 'profession', 'is_active')
+    ordering = ['last_name', 'first_name', 'middle_name']
 
 
 admin.site.register(CustomUser, CustomUserAdmin)

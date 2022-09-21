@@ -2,6 +2,7 @@ from django.contrib import admin
 
 import ReportingTool.models.directory as direct
 import users.models
+from ReportingTool.forms.completed_work_forms import CompletedWorkForm
 from ReportingTool.models.completed_work import CompletedWork
 
 
@@ -37,11 +38,29 @@ class WorksTypeAdmin(admin.ModelAdmin):
     list_filter = ('available_to',)
 
 
+class CompletedWorkAdmin(admin.ModelAdmin):
+    form = CompletedWorkForm
+    list_display = ['period', 'worker', 'work_done', 'work_scope', 'work_notes',
+                    'record_author', 'record_date', ]
+    readonly_fields = ['record_author', 'record_date']
+    list_filter = ('period', 'worker')
+    ordering = ['period', 'worker']
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "work_done":
+            kwargs["queryset"] = direct.WorksType.objects.filter()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def save_model(self, request, obj, form, change):
+        obj.record_author = request.user
+        super().save_model(request, obj, form, change)
+
+
 admin.site.register(direct.ProfessionCategory, ProfessionCategoryAdmin)
 admin.site.register(direct.Profession, ProfessionAdmin)
 admin.site.register(direct.Period)
 admin.site.register(direct.StructuralDivisions, StructuralDivisionsAdmin)
 admin.site.register(direct.WorksTypeMeasure)
 admin.site.register(direct.WorksType, WorksTypeAdmin)
-admin.site.register(CompletedWork)
+admin.site.register(CompletedWork, CompletedWorkAdmin)
 

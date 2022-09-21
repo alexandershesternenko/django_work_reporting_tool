@@ -59,7 +59,7 @@ ROOT_URLCONF = 'djangoReportingTool.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [BASE_DIR / 'users/templates']
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -138,7 +138,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'Reportingtool/workspace'
+LOGOUT_REDIRECT_URL = 'users/login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

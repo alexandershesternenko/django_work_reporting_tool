@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib import admin
 
 import ReportingTool.models.directory as direct
@@ -35,7 +37,9 @@ class StructuralDivisionsAdmin(admin.ModelAdmin):
 
 
 class WorksTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'time_norm', 'measure',)
     list_filter = ('available_to',)
+    search_fields = ('name', 'time_norm', 'measure__name',)
 
 
 class CompletedWorkAdmin(admin.ModelAdmin):
@@ -45,11 +49,17 @@ class CompletedWorkAdmin(admin.ModelAdmin):
     readonly_fields = ['record_author', 'record_date']
     list_filter = ('period', 'worker')
     ordering = ['period', 'worker']
+    search_fields = ('worker__last_name', 'worker__first_name', 'worker__middle_name', 'work_done__name')
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "work_done":
-            kwargs["queryset"] = direct.WorksType.objects.filter()
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    #     if db_field.name == "work_done":
+    #         kwargs["queryset"] = direct.WorksType.objects.filter(available_to=request.user.struct_division)
+    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    #     if db_field.name == "period":
+    #         kwargs["queryset"] = direct.Period.objects.filter(date=datetime.date.today())
+    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def save_model(self, request, obj, form, change):
         obj.record_author = request.user

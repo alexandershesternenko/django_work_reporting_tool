@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ReportingTool</title>
+</head>
+<body>
+{% if user.is_authenticated %}
+    <p>Привіт {{ user.username }}!</p>
+    <a href="{% url 'logout' %}">Вийти</a>
+    <a href="{% url 'user_info' %}">Про мене</a>
+
+    <h1>Привіт у ReportingTool</h1>
+{% else %}
+    <p>Для того, щоб увійти до ReportingTool Вам необхідно
+    <a href="{% url 'login' %}">увійти</a> або
+    <a href="{% url 'signup' %}">зареєструватись</a></p>
+
+{% endif %}
+</body>
+</html>

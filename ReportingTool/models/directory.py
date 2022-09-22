@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 
 
 class ProfessionCategory(models.Model):
@@ -16,7 +17,7 @@ class ProfessionCategory(models.Model):
 
 
 class Profession(models.Model):
-    name = models.CharField(max_length=70)
+    name = models.CharField(_("Професія"), max_length=70)
     category = models.ForeignKey(ProfessionCategory, on_delete=models.CASCADE)
 
     class Meta:

@@ -1,0 +1,16 @@
+{% load static %}
+{#{% include "notes/header.html" %}#}
+{% block content %}
+    <h2>Реєстрація</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        УВАГА! Обліковий запис буде не активним, поки його не активує адміністратор системи
+        <div>
+            <button type="submit" value="sumbit">
+                Зареєструватись
+            </button>
+        </div>
+    </form>
+    <p>Або <a href="{% url 'login' %}">увійти</a></p>
+{% endblock %}

@@ -2,7 +2,9 @@ from django import forms
 from ..models import CustomUser
 
 
-class CustomUserForm(forms.ModelForm):
+class CustomUserCreateForm(forms.ModelForm):
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
+
     class Meta:
         model = CustomUser
         fields = (
@@ -15,4 +17,6 @@ class CustomUserForm(forms.ModelForm):
             'struct_division',
             'email',
             'is_active',
+            'date_joined',
         )
+

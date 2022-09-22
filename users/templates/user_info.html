@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User info</title>
+</head>
+<body>
+Інформація про {{ user.username }}:
+<p>Прізвище: {{ user.last_name }}</p>
+<p>Ім'я: {{ user.first_name }}</p>
+<p>По-батькові: {{ user.middle_name }}</p>
+<p>Електронна пошта: {{ user.email }}</p>
+<p>Посада: {{ user.profession }}</p>
+<p>Категорія посади: {{ user.profession.category }}</p>
+<p>Структурний підрозділ: {{ user.struct_division }}</p>
+<p>Керівник підрозділу: {{ user.struct_division.head }}</p>
+<p>Керівник головного підрозділу (за наявності): {{ user.struct_division.management_unit.head }}</p>
+<p>Куратор підрозділу: {{ user.struct_division.curator }}</p>
+
+<p><a href="{% url 'index' %}">Повернутись на головну</a></p>
+</body>
+</html>

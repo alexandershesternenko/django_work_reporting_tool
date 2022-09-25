@@ -1,22 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>User info</title>
-</head>
-<body>
-Інформація про {{ user.username }}:
-<p>Прізвище: {{ user.last_name }}</p>
-<p>Ім'я: {{ user.first_name }}</p>
-<p>По-батькові: {{ user.middle_name }}</p>
-<p>Електронна пошта: {{ user.email }}</p>
-<p>Посада: {{ user.profession }}</p>
-<p>Категорія посади: {{ user.profession.category }}</p>
-<p>Структурний підрозділ: {{ user.struct_division }}</p>
-<p>Керівник підрозділу: {{ user.struct_division.head }}</p>
-<p>Керівник головного підрозділу (за наявності): {{ user.struct_division.management_unit.head }}</p>
-<p>Куратор підрозділу: {{ user.struct_division.curator }}</p>
+{% load static %}
+{% include "header.html" %}
+{% block content %}
+    {% if user.is_authenticated %}
+        <h2>Information about: {{ user.username }}</h2>
+        <table class="table table-hover">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Lastname:</td>
+                <td>{{ user.last_name }}</td>
+            </tr>
+            <tr>
+                <td>Firstname:</td>
+                <td>{{ user.first_name }}</td>
+            </tr>
+            <tr>
+                <td>Middle name:</td>
+                <td>{{ user.middle_name }}</td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <td>Active:</td>
+                <td>{{ user.is_active }}</td>
+            </tr>
+            <tr>
+                <td>Data joined:</td>
+                <td>{{ user.date_joined }}</td>
+            </tr>
+            <tr>
+                <td>Profession:</td>
+                <td>{{ user.profession }}</td>
+            </tr>
+            <tr>
+                <td>Type of profession:</td>
+                <td>{{ user.profession.category }}</td>
+            </tr>
+            <tr>
+                <td>Structural division:</td>
+                <td>{{ user.struct_division }}</td>
+            </tr>
+            <tr>
+                <td>Head:</td>
+                <td>{{ user.struct_division.head }}</td>
+            </tr>
+            <tr>
+                <td>Curator:</td>
+                <td>{{ user.struct_division.curator }}</td>
+            </tr>
+            </tbody>
+        </table>
+    {% else %}
+        <p>You have no access to this page. Please log in or sing up.</p>
+    {% endif %}
+{% endblock content %}
 
-<p><a href="{% url 'index' %}">Повернутись на головну</a></p>
-</body>
-</html>
+

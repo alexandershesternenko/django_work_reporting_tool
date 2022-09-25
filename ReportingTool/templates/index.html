@@ -1,3 +1,5 @@
+{% load static %}
+{% include "header.html" %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,16 +8,10 @@
 </head>
 <body>
 {% if user.is_authenticated %}
-    <p>Привіт {{ user.username }}!</p>
-    <a href="{% url 'logout' %}">Вийти</a>
-    <a href="{% url 'user_info' %}">Про мене</a>
-
-    <h1>Привіт у ReportingTool</h1>
+    <p>{{ user.first_name }} welcome in Reporting Tool.</p>
+    <p>This resource was created to automate the preparation and collection of reports.</p>
 {% else %}
-    <p>Для того, щоб увійти до ReportingTool Вам необхідно
-    <a href="{% url 'login' %}">увійти</a> або
-    <a href="{% url 'signup' %}">зареєструватись</a></p>
-
-{% endif %}
+    <p>You need to log in or sign up.</p>
+ {% endif %}
 </body>
 </html>

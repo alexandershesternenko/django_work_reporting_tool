@@ -1,4 +1,3 @@
-import datetime
 
 from django.contrib import admin
 
@@ -6,6 +5,9 @@ import ReportingTool.models.directory as direct
 import users.models
 from ReportingTool.forms.completed_work_forms import CompletedWorkForm
 from ReportingTool.models.completed_work import CompletedWork
+from django_admin_listfilter_dropdown.filters import (
+    DropdownFilter, ChoiceDropdownFilter, RelatedDropdownFilter, RelatedOnlyDropdownFilter
+)
 
 
 class ProfessionCategoryAdmin(admin.ModelAdmin):
@@ -32,34 +34,31 @@ class ProfessionAdmin(admin.ModelAdmin):
 
 
 class StructuralDivisionsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'management_unit',)
+    list_display = ('name', 'management_unit', 'head', 'curator')
     list_filter = (('management_unit', admin.RelatedOnlyFieldListFilter),)
 
 
 class WorksTypeAdmin(admin.ModelAdmin):
     list_display = ('name', 'time_norm', 'measure',)
-    list_filter = ('available_to',)
+    list_filter = (
+        ('available_to', RelatedDropdownFilter),
+    )
     search_fields = ('name', 'time_norm', 'measure__name',)
 
 
 class CompletedWorkAdmin(admin.ModelAdmin):
     form = CompletedWorkForm
-    list_display = ['period', 'worker', 'work_done', 'work_scope', 'work_notes',
+    list_display = ['period', 'worker', 'work_done', 'work_scope', 'work_notes', 'checked_by_head',
                     'record_author', 'record_date', ]
     readonly_fields = ['record_author', 'record_date']
-    list_filter = ('period', 'worker')
+    list_filter = (
+        ('period', RelatedOnlyDropdownFilter),
+        ('worker', RelatedOnlyDropdownFilter),
+        ('record_author', RelatedOnlyDropdownFilter),
+        ('checked_by_head', DropdownFilter),
+    )
     ordering = ['period', 'worker']
     search_fields = ('worker__last_name', 'worker__first_name', 'worker__middle_name', 'work_done__name')
-
-    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
-    #     if db_field.name == "work_done":
-    #         kwargs["queryset"] = direct.WorksType.objects.filter(available_to=request.user.struct_division)
-    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
-    #     if db_field.name == "period":
-    #         kwargs["queryset"] = direct.Period.objects.filter(date=datetime.date.today())
-    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def save_model(self, request, obj, form, change):
         obj.record_author = request.user

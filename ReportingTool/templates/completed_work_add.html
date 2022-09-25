@@ -1,0 +1,33 @@
+{% load static %}
+{% include "header.html" %}
+{% block content %}
+    {% if user.is_authenticated %}
+            <h2>Add new record</h2>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div>
+                    {{ form.as_p }}
+                </div>
+                <div>
+                    <button type="submit" value="sumbit" class="btn btn-outline-secondary">
+                        Save
+                    </button>
+                            <a href="{% url 'index' %}">Cancel</a>
+                </div>
+            </form>
+
+
+    {% else %}
+        <p>You have no access to this page. Please log in or sing up.</p>
+    {% endif %}
+   {% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+      {{ error }}
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+         {{ error }}
+    {% endfor %}
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,87 @@
+{% load static %}
+{% include "header.html" %}
+{% block content %}
+
+    {% if user.is_authenticated %}
+        <h2>My completed work</h2>
+        <table class="search">
+            <form method="get">
+                {% for choice in filter.form %}
+
+                    {% if choice.name == 'work_done' %}
+                        <td>Work's type: {{ choice }}</td>
+                    {% elif choice.name == 'period' %}
+                        <td>Date: {{ choice }}</td>
+                    {% elif choice.name == 'checked_by_head' %}
+                        <td>Checked: {{ choice }}</td>
+                    {% elif choice.name == 'sort' %}
+                        <td>Sort by: {{ choice }}</td>
+                        <td>
+                            <div>
+                                <button type="submit" value="sumbit" class="btn btn-outline-secondary">
+                                    Search
+                                </button>
+                            </div>
+                        </td>
+                    {% endif %}
+                {% endfor %}
+
+            </form>
+
+        </table>
+        {% if object_list %}
+            <table class="table table-hover">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Date</th>
+                <th scope="col">Worker</th>
+                <th scope="col">Type of work done</th>
+                <th scope="col">Work's scope</th>
+                <th scope="col">Work's measure</th>
+                <th scope="col">Notes</th>
+                <th scope="col">Checked by head</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                {% if  user == user.struct_division.head and object.worker.struct_division == user.struct_division %}
+                    <tr>
+                        <td></td>
+                        <td>{{ object.period }}</td>
+                        <td>{{ object.worker }}</td>
+                        <td>{{ object.work_done }}</td>
+                        <td>{{ object.work_scope }}</td>
+                        <td>{{ object.work_done.WorksType.measure.WorksTypeMeasure.name }}</td>
+                        <td>{{ object.work_notes }}</td>
+                        <td>{{ object.checked_by_head }}</td>
+                    </tr>
+                {% elif object.worker == user %}
+                    <tr>
+                        <td></td>
+                        <td>{{ object.period }}</td>
+                        <td>{{ object.worker }}</td>
+                        <td>{{ object.work_done }}</td>
+                        <td>{{ object.work_scope }}</td>
+                        <td>{{ object.work_done.WorksType.measure.WorksTypeMeasure.name }}</td>
+                        <td>{{ object.work_notes }}</td>
+                        <td>{{ object.checked_by_head }}</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            {% endfor %}
+        {% else %}
+            <p>No objects found.</p>
+        {% endif %}
+    </table>
+
+    {% else %}
+        <p>You need to log in or sign up</p>
+    {% endif %}
+    <script>
+        $('.table tbody tr').each(function (i) {
+            var number = i + 1;
+            $(this).find('td:first').text(number + ".");
+        });
+    </script>
+{% endblock content %}

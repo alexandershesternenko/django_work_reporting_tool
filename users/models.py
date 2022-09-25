@@ -10,23 +10,26 @@ from ReportingTool.models import directory
 class CustomUser(AbstractUser):
     username_validator = UnicodeUsernameValidator()
 
-    username = models.CharField(_("Ім'я користувача"), max_length=100,
+    username = models.CharField(_("Username"), max_length=100,
                                 unique=True,
                                 validators=[username_validator],
                                 error_messages={
-                                    "unique": _("Такий обліковий запис вже є"),
+                                    "unique": _("A user with that username already exists."),
                                 },
-                                help_text='Латинськими літерами (напр. ShevchenkoTG)'
+                                help_text='example: ShevchenkoTG'
                                 )
-    first_name = models.CharField(_("Ім'я"), max_length=25)
-    last_name = models.CharField(_("Прізвище"), max_length=25)
-    middle_name = models.CharField(_("По батькові"), max_length=25, blank=True)
-    email = models.EmailField(_("Електронна пошта"), blank=True)
-    profession = models.ForeignKey(directory.Profession, on_delete=models.CASCADE, verbose_name="Професія", blank=True, null=True)
-    struct_division = models.ForeignKey(directory.StructuralDivisions, on_delete=models.CASCADE,
-                                        verbose_name="Структурний підрозділ", blank=True, null=True)
+    first_name = models.CharField(_("First name"), max_length=25)
+    last_name = models.CharField(_("Last name"), max_length=25)
+    middle_name = models.CharField(_("Middle name"), max_length=25, blank=True)
+    email = models.EmailField(_("Email"), blank=True)
+    profession = models.ForeignKey(directory.Profession,
+                                   on_delete=models.SET('deleted profession'),
+                                   verbose_name="Profession", blank=True, null=True)
+    struct_division = models.ForeignKey(directory.StructuralDivisions,
+                                        on_delete=models.SET('deleted structural division'),
+                                        verbose_name="Structural Divisions", blank=True, null=True)
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
-    is_active = models.BooleanField(_("Активний"), default=False)
+    is_active = models.BooleanField(_("active"), default=False)
 
     def __repr__(self):
         return self.last_name, self.first_name, self.middle_name

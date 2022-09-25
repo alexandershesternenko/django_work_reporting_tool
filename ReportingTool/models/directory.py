@@ -17,8 +17,10 @@ class ProfessionCategory(models.Model):
 
 
 class Profession(models.Model):
-    name = models.CharField(_("Професія"), max_length=70)
-    category = models.ForeignKey(ProfessionCategory, on_delete=models.CASCADE)
+    name = models.CharField(_("Profession"), max_length=70)
+    category = models.ForeignKey(
+        ProfessionCategory,
+        on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('name', )
@@ -42,26 +44,36 @@ class Period(models.Model):
 
 class StructuralDivisions(models.Model):
     name = models.CharField(max_length=70)
-    management_unit = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
+    management_unit = models.ForeignKey(
+        'self',
+        on_delete=models.SET('deleted structural divison'),
+        blank=True, null=True)
+
     head = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE, related_name='head_of_SD', blank=True, null=True
+        on_delete=models.SET_NULL,
+        related_name='head_of_SD',
+        blank=True,
+        null=True
     )
+
     curator = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE, related_name='curator_of_SD', blank=True, null=True
+        on_delete=models.SET('deleted user'),
+        related_name='curator_of_SD',
+        blank=True,
+        null=True
     )
 
     class Meta:
         verbose_name_plural = "Structural division"
         ordering = ('name',)
     
-
     def __repr__(self):
         return self.pk, self.name, self.management_unit_id
 
     def __str__(self):
-        return str(self.name)
+        return f'{self.name} (id: {self.pk})'
 
 
 class WorksTypeMeasure(models.Model):
@@ -75,10 +87,14 @@ class WorksTypeMeasure(models.Model):
 
 
 class WorksType(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=120)
     available_to = models.ManyToManyField(StructuralDivisions)
     time_norm = models.FloatField(blank=True, null=True)  # man-hours
-    measure = models.ForeignKey(WorksTypeMeasure, on_delete=models.CASCADE, blank=True, null=True)
+    measure = models.ForeignKey(
+        WorksTypeMeasure,
+        on_delete=models.SET('deleted measure'),
+        blank=True,
+        null=True)
 
     class Meta:
         ordering = ('name',)

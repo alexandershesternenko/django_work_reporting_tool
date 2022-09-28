@@ -4,20 +4,21 @@
     <script src="{% static 'ReportingTool/js/sort_text.js' %}"></script>
     <script src="{% static 'ReportingTool/js/sort_number.js' %}"></script>
 
-    {% if user.is_authenticated %}
-        <h2>My completed work</h2>
+    {% if user.is_authenticated and user.is_head %}
+        <h2>Completed work should be checked by {{ user }}</h2>
         <table class="search">
             <form method="get">
                 <table>
                     <tr>
                         {% for choice in filter.form %}
-                            {% if choice.name == 'period' %}
+                            {% if choice.name == 'worker__struct_division' %}
+                                <td>SD: {{ choice }}</td>
+                            {% elif choice.name == 'period' %}
                                 <td>Date: {{ choice }}</td>
-                            {% elif choice.name == 'checked_by_head' %}
-                                <td>Checked: {{ choice }}</td>
+                            {% elif choice.name == 'worker' %}
+                                <td>Worker: {{ choice }}</td>
                             {% elif choice.name == 'work_done' %}
-                                </tr>
-                                </table>
+                                </tr></table>
                                 <table>
                                     <tr>
                                         <td>Work's type: {{ choice }}</td>
@@ -33,9 +34,7 @@
                                 </table>
                             {% endif %}
                         {% endfor %}
-
             </form>
-
         </table>
         {% if object_list %}
             <table class="table table-hover" id="DataFromBase">
@@ -43,32 +42,53 @@
             <tr>
                 <th scope="col" onclick="sortNumber()">&#9650;</th>
                 <th scope="col" onclick="sortTable(1)">Date &diams;</th>
-                <th scope="col" onclick="sortTable(3)">Type of work done &diams;</th>
+                <th scope="col" onclick="sortTable(2)">Main SD &diams;</th>
+                <th scope="col" onclick="sortTable(3)">Sub SD &diams;</th>
+                <th scope="col" onclick="sortTable(4)">Worker &diams;</th>
+                <th scope="col" onclick="sortTable(5)">Type of work done &diams;</th>
                 <th scope="col">Scope</th>
+                <th scope="col">TimeNorm</th>
                 <th scope="col">Measure</th>
                 <th scope="col">Notes</th>
-                <th scope="col" onclick="sortNumber()">Record added &diams;</th>
-                <th scope="col" onclick="sortTable(1)">Record author &diams;</th>
-                <th scope="col">Checked by head</th>
+                <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
             {% for object in object_list %}
-                {% if object.worker == user %}
-                    <tr>
-                        <td></td>
-                        <td>{{ object.period }}</td>
-                        <td>{{ object.work_done }}</td>
-                        <td>{{ object.work_scope }}</td>
-                        <td>{{ object.work_done.measure }}</td>
-                        <td>{{ object.work_notes }}</td>
-                        <td>{{ object.record_date }}</td>
-                        <td>{{ object.record_author }}</td>
-                        <td>{{ object.checked_by_head }}</td>
-                        <td>
-                            {% if object.checked_by_head is False %}
+                {% if object.worker.struct_division == user.struct_division or object.worker.struct_division.management_unit == user.struct_division %}
+                    {% if not object.checked_by_head %}
+                        <tr>
+                            <td></td>
+                            <td>{{ object.period }}</td>
+                            {% if object.worker.struct_division.management_unit == None %}
+                                <td>{{ object.worker.struct_division }}</td>
+                                <td></td>
+                            {% else %}
+                                <td>{{ object.worker.struct_division.management_unit }}</td>
+                                <td>{{ object.worker.struct_division }}</td>
+                            {% endif %}
+                            <td>{{ object.worker }}</td>
+                            <td>{{ object.work_done }}</td>
+                            <td>{{ object.work_scope }}</td>
+                            <td>{{ object.work_done.time_norm }}</td>
+                            <td>{{ object.work_done.measure }}</td>
+                            <td>{{ object.work_notes }}</td>
+
+                            <td>
+
+                                <form method="post" action="{% url 'completed_work_accept' object.pk %}">
+                                    {% csrf_token %}
+                                    <button style="height:40px;width:40px"
+                                            type="submit" value="sumbit"
+                                            class="btn btn-outline-success"
+                                            title="Accept record">
+                                        &#10003;
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
                                 <button style="height:40px;width:40px"
                                         class="btn btn-outline-primary"
                                         onclick=
@@ -77,10 +97,9 @@
                                         title="Edit record">
                                     &#128393;
                                 </button>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if object.checked_by_head is False %}
+                            </td>
+                            <td>
+
                                 <button style="height:40px;width:40px" class="btn btn-outline-danger"
                                         onclick=
                                                 "location.href=
@@ -88,10 +107,10 @@
                                         title="Delete record">
                                     &#65794;
                                 </button>
-                            {% endif %}
-                        </td>
 
-                    </tr>
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endif %}
                 </tbody>
             {% endfor %}

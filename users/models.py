@@ -3,8 +3,8 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-
 from ReportingTool.models import directory
+from ReportingTool.models.directory import StructuralDivisions
 
 
 class CustomUser(AbstractUser):
@@ -31,8 +31,21 @@ class CustomUser(AbstractUser):
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     is_active = models.BooleanField(_("active"), default=False)
 
+    def is_head(self):
+        if StructuralDivisions.objects.filter(head=self.pk):
+            return True
+        return False
+
+    def is_curator(self):
+        if StructuralDivisions.objects.filter(curator=self.pk):
+            return True
+        return False
+
     def __repr__(self):
-        return self.last_name, self.first_name, self.middle_name
+        return f'{self.last_name} {self.first_name} {self.middle_name}'
 
     def __str__(self):
         return f'{self.last_name} {self.first_name} {self.middle_name}'
+
+
+

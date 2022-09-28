@@ -1,0 +1,118 @@
+{% load static %}
+{% include "header.html" %}
+{% block content %}
+    <script src="{% static 'ReportingTool/js/sort_text.js' %}"></script>
+    <script src="{% static 'ReportingTool/js/sort_number.js' %}"></script>
+
+    {% if user.is_authenticated %}
+        <h2>Completed work by {{ user }} related structural divisions</h2>
+        <table class="search">
+            <form method="get">
+                <table>
+                    <tr>
+                        {% for choice in filter.form %}
+                            {% if choice.name == 'worker__struct_division' %}
+                                <td>SD: {{ choice }}</td>
+                            {% elif choice.name == 'period' %}
+                                <td>Date: {{ choice }}</td>
+                            {% elif choice.name == 'worker' %}
+                                <td>Worker: {{ choice }}</td>
+                                </tr>
+                                </table>
+                                <table>
+                                    {% elif choice.name == 'work_done' %}
+                                    <tr>
+                                        <td>Work's type: {{ choice }}</td>
+                                    </tr>
+                                    <td>
+                                        <button
+                                                style="height:40px;width:50px"
+                                                type="submit"
+                                                value="sumbit"
+                                                class="btn btn-outline-secondary"
+                                                title="Search">
+                                            &#128269;
+                                        </button>
+                                </form>
+                                <button
+                                        style="height:40px;width:50px"
+                                        class="btn btn-outline-success"
+                                        onclick="location.href='{% url 'export_report' %}'"
+                                        title="Export csv">
+                                    &#128190;
+                                </button>
+                                </td>
+                                </table>
+                            {% endif %}
+                        {% endfor %}
+
+        </table>
+        {% if object_list %}
+            <table class="table table-hover" id="DataFromBase">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col" onclick="sortNumber()">&#9650;</th>
+                <th scope="col" onclick="sortTable(1)">Date &diams;</th>
+                <th scope="col" onclick="sortTable(2)">Main SD &diams;</th>
+                <th scope="col" onclick="sortTable(3)">Sub SD &diams;</th>
+                <th scope="col" onclick="sortTable(4)">Worker &diams;</th>
+                <th scope="col" onclick="sortTable(5)">Type of work done &diams;</th>
+                <th scope="col">Scope</th>
+                <th scope="col">TimeNorm</th>
+                <th scope="col">Measure</th>
+                <th scope="col">Notes</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                {% if object.worker.struct_division == user.struct_division or object.worker.struct_division.management_unit == user.struct_division or object.worker.struct_division.curator == user or object.worker.struct_division.management_unit.curator == user %}
+                    {% if object.checked_by_head %}
+                        <tr>
+                            <td></td>
+                            <td>{{ object.period }}</td>
+                            {% if object.worker.struct_division.management_unit == None %}
+                                <td>{{ object.worker.struct_division }}</td>
+                                <td></td>
+                            {% else %}
+                                <td>{{ object.worker.struct_division.management_unit }}</td>
+                                <td>{{ object.worker.struct_division }}</td>
+                            {% endif %}
+                            <td>{{ object.worker }}</td>
+                            <td>{{ object.work_done }}</td>
+                            <td>{{ object.work_scope }}</td>
+                            <td>{{ object.work_done.time_norm }}</td>
+                            <td>{{ object.work_done.measure }}</td>
+                            <td>{{ object.work_notes }}</td>
+                            {% if user.is_head or object.record_author == user %}
+                                <td>
+                                    <form method="post" action="{% url 'completed_work_reject' object.pk %}">
+                                        {% csrf_token %}
+                                        <button
+                                                class="btn btn-outline-warning"
+                                                style="height:40px;width:40px"
+                                                type="submit"
+                                                value="sumbit"
+                                                title="Reject record">
+                                            &#8722;
+                                        </button>
+                                    </form>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endif %}
+                {% endif %}
+                </tbody>
+            {% endfor %}
+        {% else %}
+            <p>No objects found.</p>
+        {% endif %}
+    </table>
+
+    {% else %}
+        <p>Sorry, you are not allowed to access this page</p>
+    {% endif %}
+    <script src="{% static 'ReportingTool/js/rows_count.js' %}"></script>
+{% endblock content %}
+{% include "footer.html" %}
+

@@ -16,9 +16,15 @@ class CustomUserAdmin(admin.ModelAdmin):
         ('profession', RelatedDropdownFilter),
         ('is_active', DropdownFilter),
     )
-    ordering = ['last_name', 'first_name', 'middle_name']
+    ordering = ['username', 'last_name', 'first_name', 'middle_name']
     search_fields = ('last_name', 'first_name', 'middle_name',)
     readonly_fields = []
+
+    def get_fields(self, request, obj=None):
+        fields = super().get_fields(request, obj)
+        if obj:
+            fields.extend(['groups', 'user_permissions'])
+        return fields
 
     def get_readonly_fields(self, request, obj=None):
         if obj:

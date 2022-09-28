@@ -1,17 +1,9 @@
 {% load static %}
 {% include "header.html" %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ReportingTool</title>
-</head>
-<body>
 {% if user.is_authenticated %}
     <p>{{ user.first_name }} welcome in Reporting Tool.</p>
     <p>This resource was created to automate the preparation and collection of reports.</p>
 {% else %}
     <p>You need to log in or sign up.</p>
  {% endif %}
-</body>
-</html>
+{% include "footer.html" %}

@@ -1,0 +1,72 @@
+{% load static %}
+{% include "header.html" %}
+{% block content %}
+    <script src="{% static 'ReportingTool/js/sort_text.js' %}"></script>
+    <script src="{% static 'ReportingTool/js/sort_number.js' %}"></script>
+
+    {% if user.is_authenticated %}
+        <h2>Completed work by {{ user.struct_division }}</h2>
+        <table class="search">
+            <form method="get">
+                <table>
+                    <tr>
+                        {% for choice in filter.form %}
+                            {% if choice.name == 'worker' %}
+                                <td>Worker: {{ choice }}</td>
+                            {% elif choice.name == 'period' %}
+                                <td>Date: {{ choice }}</td>
+                                {% elif choice.name == 'work_done' %}
+                                </tr>
+                                </table>
+                                <table>
+                                    <tr>
+                                        <td>Work's type: {{ choice }}</td>
+                                    </tr>
+                                </table>
+                            {% endif %}
+                        {% endfor %}
+            </form>
+        </table>
+        {% if object_list %}
+            <table class="table table-hover" id="DataFromBase">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col" onclick="sortNumber()">&#9650;</th>
+                <th scope="col" onclick="sortTable(1)">Date &diams;</th>
+                <th scope="col" onclick="sortTable(2)">Worker &diams;</th>
+                <th scope="col" onclick="sortTable(3)">Type of work done &diams;</th>
+                <th scope="col">Scope</th>
+                <th scope="col">TimeNorm</th>
+                <th scope="col">Measure</th>
+                <th scope="col">Notes</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                {% if object.worker.struct_division == user.struct_division and object.checked_by_head %}
+                    <tr>
+                        <td></td>
+                        <td>{{ object.period }}</td>
+                        <td>{{ object.worker }}</td>
+                        <td>{{ object.work_done }}</td>
+                        <td>{{ object.work_scope }}</td>
+                        <td>{{ object.work_done.time_norm }}</td>
+                        <td>{{ object.work_done.measure }}</td>
+                        <td>{{ object.work_notes }}</td>
+                        <td><a class="nav-link" href="{% url 'completed_work_edit' object.pk %}">Edit</a></td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            {% endfor %}
+        {% else %}
+            <p>No objects found.</p>
+        {% endif %}
+    </table>
+
+    {% else %}
+        <p>Sorry, you are not allowed to access this page</p>
+    {% endif %}
+    <script src="{% static 'ReportingTool/js/rows_count.js' %}"></script>
+{% endblock content %}
+{% include "footer.html" %}

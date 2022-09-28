@@ -59,7 +59,7 @@ class StructuralDivisions(models.Model):
 
     curator = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.SET('deleted user'),
+        on_delete=models.SET_NULL,
         related_name='curator_of_SD',
         blank=True,
         null=True
@@ -73,7 +73,7 @@ class StructuralDivisions(models.Model):
         return self.pk, self.name, self.management_unit_id
 
     def __str__(self):
-        return f'{self.name} (id: {self.pk})'
+        return f'{self.name}'
 
 
 class WorksTypeMeasure(models.Model):

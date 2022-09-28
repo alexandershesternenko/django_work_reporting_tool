@@ -2,22 +2,25 @@
 {% include "header.html" %}
 {% block content %}
     {% if user.is_authenticated %}
-        <h2>Add new record</h2>
+        <h2>Edit record</h2>
         <table>
             <tr>
-                <form action="" method="post">
+                <form action="{% url 'completed_work_edit' editcompletedwork.id %}" method="post">
                     {% csrf_token %}
 
                     {{ form.as_p }}
+
                     <button
                             style="height:40px;width:40px"
                             type="submit"
                             value="sumbit"
                             class="btn btn-outline-success"
-                            title="Add record">
+                            title="Edit record">
                         &#10003;
                     </button>
                 </form>
+
+
             <tr> or </tr>
             <button
                     style="height:40px;width:40px"
@@ -26,6 +29,8 @@
                     title="Cancel">
                 &#8416;
             </button>
+            </tr>
+
             </tr>
         </table>
     {% else %}

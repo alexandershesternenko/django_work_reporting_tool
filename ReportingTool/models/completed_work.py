@@ -1,3 +1,4 @@
+from django import forms
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -15,7 +16,7 @@ class CompletedWork(models.Model):
     )
     work_done = models.ForeignKey(directory.WorksType, on_delete=models.SET('deleted works type'))
     work_scope = models.FloatField(blank=True, null=True)
-    work_notes = models.CharField(_("Comments"), max_length=25, blank=True, null=True)
+    work_notes = models.CharField(_("Comments"), max_length=70, blank=True, null=True, )
     record_author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET('deleted user'),

@@ -2,7 +2,7 @@ from django import forms
 from django.utils.timezone import now
 
 from ReportingTool.models.completed_work import *
-from ReportingTool.models.directory import WorksType, Period
+from ReportingTool.models.directory import WorksType, Period, StructuralDivisions
 from users.models import CustomUser
 
 
@@ -15,6 +15,7 @@ class CompletedWorkForm(forms.ModelForm):
             'work_done',
             'work_scope',
             'work_notes',
+
         )
 
     def __init__(self, user, *args, **kwargs):
@@ -25,21 +26,27 @@ class CompletedWorkForm(forms.ModelForm):
 
         if user.struct_division:
 
-            if user != user.struct_division.head or user != user.struct_division.curator:
+            if user == user.struct_division.head:
+                self.fields['worker'] = forms.ModelChoiceField(
+                    queryset=
+                    CustomUser.objects.filter(struct_division=
+                                              user.struct_division).order_by('last_name') |
+                    CustomUser.objects.filter(struct_division__management_unit=
+                                              user.struct_division).order_by('last_name')
+                )
+
+            elif StructuralDivisions.objects.filter(curator=user):
+                sd_user_curator = StructuralDivisions.objects.filter(curator=user)
+                self.fields['worker'] = forms.ModelChoiceField(
+                    queryset=
+                    CustomUser.objects.filter(struct_division__in=sd_user_curator) |
+                    CustomUser.objects.filter(id=user.pk)
+                )
+
+            else:
                 self.fields['worker'] = forms.ModelChoiceField(
                     queryset=CustomUser.objects.filter(id=user.pk)
                 )
-            else:
-                self.fields['worker'] = forms.ModelChoiceField(
-                    queryset=CustomUser.objects.filter(struct_division=user.struct_division)
-                )
-
-        else:  # if user == user.struct_division.curator:
-            self.fields['worker'] = forms.ModelChoiceField(
-                queryset=
-                CustomUser.objects.filter(struct_division__curator=user) |
-                CustomUser.objects.filter(id=user.pk)
-            )
 
         self.fields['work_done'] = forms.ModelChoiceField(
             queryset=WorksType.objects.filter(available_to=user.struct_division)

@@ -34,7 +34,7 @@ class ProfessionAdmin(admin.ModelAdmin):
 
 
 class StructuralDivisionsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'management_unit', 'head', 'curator')
+    list_display = ('name', 'id', 'management_unit', 'head', 'curator')
     list_filter = (('management_unit', admin.RelatedOnlyFieldListFilter),)
 
 

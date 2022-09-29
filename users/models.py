@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 from django.utils import timezone
@@ -7,7 +7,7 @@ from ReportingTool.models import directory
 from ReportingTool.models.directory import StructuralDivisions
 
 
-class CustomUser(AbstractUser):
+class CustomUser(AbstractUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
 
     username = models.CharField(_("Username"), max_length=100,

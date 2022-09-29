@@ -2,15 +2,30 @@
 {% include "header.html" %}
 {% block content %}
     <h2>Sign up</h2>
+        <table>
+        <tr>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        WARNING! The account will not be active until it is activated by a system administrator
-        <div>
-            <button type="submit" value="sumbit" class="btn btn-outline-secondary">
-                Sign up
-            </button>
-        </div>
+                {{ form.as_p }}
+                <p>WARNING! The account will not be active until it is activated by a system administrator</p>
+                <button
+                        style="height:40px;width:50px"
+                        type="submit"
+                        value="sumbit"
+                        class="btn btn-outline-success"
+                        title="Sign up">
+                   &#128273;
+                </button>
     </form>
+    <tr> or </tr>
+    <button
+            style="height:40px;width:50px"
+            class="btn btn-outline-primary"
+            onclick="location.href='{% url 'index' %}'"
+            title="Cancel">
+        &#8416;
+    </button>
+            </tr>
+        </table>
 {% endblock %}
 {% include "footer.html" %}

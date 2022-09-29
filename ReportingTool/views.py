@@ -1,7 +1,7 @@
 import csv
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
@@ -15,11 +15,12 @@ def index(request):
     return render(request, 'index.html')
 
 
-class CreateCompletedWorkView(LoginRequiredMixin, CreateView):
+class CreateCompletedWorkView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = CompletedWork
     form_class = CompletedWorkForm
     template_name = 'completed_work_add.html'
     success_url = reverse_lazy('completed_work_list')
+    success_message = f'Record successfully added'
 
     def get_form_kwargs(self):
         kwargs = super(CreateCompletedWorkView, self).get_form_kwargs()
@@ -31,13 +32,13 @@ class CreateCompletedWorkView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class EditCompletedWorkView(LoginRequiredMixin, UpdateView):
+class EditCompletedWorkView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = CompletedWork
     form_class = CompletedWorkForm
     template_name = 'completed_work_edit.html'
     context_object_name = 'editcompletedwork'
-    # permission_required = ('ReportingTool.view_completed_work', 'ReportingTool.change_completed_work',)
     success_url = None
+    success_message = 'Record successfully updated'
 
     def get_form_kwargs(self):
         kwargs = super(EditCompletedWorkView, self).get_form_kwargs()
@@ -50,18 +51,12 @@ class EditCompletedWorkView(LoginRequiredMixin, UpdateView):
         return super().get(request, *args, **kwargs)
 
 
-class DeleteCompletedWorkView(LoginRequiredMixin, DeleteView):
+class DeleteCompletedWorkView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = CompletedWork
-    # form_class = CompletedWorkForm
     template_name = 'completed_work_delete.html'
     context_object_name = 'deletecompletedwork'
-    # permission_required = ('ReportingTool.view_completed_work', 'ReportingTool.change_completed_work',)
     success_url = reverse_lazy('completed_work_accept')
-
-    def get_form_kwargs(self):
-        kwargs = super(DeleteCompletedWorkView, self).get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
+    success_message = 'Record successfully updated'
 
     def get(self, request, *args, **kwargs):
         print(self)
@@ -71,7 +66,6 @@ class DeleteCompletedWorkView(LoginRequiredMixin, DeleteView):
 
 class AcceptCompletedWorkView(LoginRequiredMixin, View):
     model = CompletedWork
-    # permission_required = ('ReportingTool.view_completed_work', 'ReportingTool.change_completed_work',)
 
     def post(self, request, *args, **kwargs):
         completed_work_record = self.model.objects.get(id=kwargs['pk'])
@@ -82,7 +76,6 @@ class AcceptCompletedWorkView(LoginRequiredMixin, View):
 
 class RejectCompletedWorkView(LoginRequiredMixin, View):
     model = CompletedWork
-    # permission_required = ('ReportingTool.view_completed_work', 'ReportingTool.change_completed_work',)
 
     def post(self, request, *args, **kwargs):
         completed_work_record = self.model.objects.get(id=kwargs['pk'])
@@ -128,5 +121,6 @@ def export_report(request):
         writer.writerow(record)
 
     response['Content-Disposition'] = 'attachment; filename="completed_work_list.csv"'
-    # response.write(u'\ufeff'.encode('utf8'))
     return response
+
+

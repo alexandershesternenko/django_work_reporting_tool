@@ -16,3 +16,4 @@ class SignUpForm(CustomUserCreateForm):
             'struct_division',
             'email',
         )
+

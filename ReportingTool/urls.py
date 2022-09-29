@@ -36,11 +36,6 @@ urlpatterns = [
              template_name='completed_work_check.html'),
          name='completed_work_check'),
 
-    path('reports_struct_unit',
-         FilterView.as_view(
-             filterset_class=CompletedWorkFilter,
-             template_name='reports_struct_unit.html'),
-         name='reports_struct_unit'),
 
     path('reports_related_struct_unit',
          FilterView.as_view(

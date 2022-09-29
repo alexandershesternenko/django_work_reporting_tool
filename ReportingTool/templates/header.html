@@ -74,11 +74,6 @@
                                         </a>
                                     </li>
                                         {% endif %}
-{#                                    <li>#}
-{#                                        <a class="dropdown-item" href="{% url 'reports_struct_unit' %}">#}
-{#                                            Structural unit#}
-{#                                        </a>#}
-{#                                    </li>#}
                                     <li>
                                         <a class="dropdown-item" href="{% url 'reports_related_struct_unit' %}">
                                             Related structural units
@@ -107,5 +102,5 @@
         </nav>
 
     </header>
-
+{% include 'messaging.html' %}
 {% endblock content %}

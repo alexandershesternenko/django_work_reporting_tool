@@ -56,7 +56,7 @@ class DeleteCompletedWorkView(LoginRequiredMixin, SuccessMessageMixin, DeleteVie
     template_name = 'completed_work_delete.html'
     context_object_name = 'deletecompletedwork'
     success_url = reverse_lazy('completed_work_accept')
-    success_message = 'Record successfully updated'
+    success_message = 'Record successfully deleted'
 
     def get(self, request, *args, **kwargs):
         print(self)

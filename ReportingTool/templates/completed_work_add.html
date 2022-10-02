@@ -1,45 +1,65 @@
 {% load static %}
+{% load crispy_forms_tags %}
 {% include "header.html" %}
 {% block content %}
-    {% if user.is_authenticated %}
-        <h2>Add new record</h2>
-        <table>
-            <tr>
-                <form action="" method="post">
-                    {% csrf_token %}
+    <script src="{% static 'ReportingTool/js/prev_page.js' %}"></script>
+    <div class="w-auto p-3">
+        {% if user.is_authenticated %}
+            <div class="page-header">
+                <h3>Add new record</h3>
+            </div>
+            <table>
+                <tr>
+                    <form action="" method="post">
+                        {% csrf_token %}
 
-                    {{ form.as_p }}
+                        <div class="d-flex pe-auto">
+                            {{ form.period |as_crispy_field }}
+                        </div>
+                        <div class="d-flex pe-auto">
+                            {{ form.worker |as_crispy_field }}
+                        </div>
+                        <div class="d-flex pe-auto">
+                            {{ form.work_done |as_crispy_field }}
+                        </div>
+                        <div class="d-flex pe-auto">
+                            {{ form.work_scope |as_crispy_field }}
+                        </div>
+                        <div class="d-flex pe-auto">
+                            {{ form.work_notes |as_crispy_field }}
+                        </div>
+                        <button
+                                style="height:40px;width:40px"
+                                type="submit"
+                                value="sumbit"
+                                class="btn btn-outline-success"
+                                title="Add record">
+                            &#10003;
+                        </button>
+                    </form>
+                    &nbsp;
                     <button
                             style="height:40px;width:40px"
-                            type="submit"
-                            value="sumbit"
-                            class="btn btn-outline-success"
-                            title="Add record">
-                        &#10003;
+                            class="btn btn-outline-primary"
+                            onclick="goPrev()"
+                            title="Cancel">
+                        &#8416;
                     </button>
-                </form>
-            <tr> or </tr>
-            <button
-                    style="height:40px;width:40px"
-                    class="btn btn-outline-primary"
-                    onclick="location.href='{% url 'completed_work_list' %}'"
-                    title="Cancel">
-                &#8416;
-            </button>
-            </tr>
-        </table>
-    {% else %}
-        <p>Sorry, you are not allowed to access this page</p>
-    {% endif %}
-    {% if form.errors %}
-        {% for field in form %}
-            {% for error in field.errors %}
+                </tr>
+            </table>
+        {% else %}
+            <p>Sorry, you are not allowed to access this page</p>
+        {% endif %}
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    {{ error }}
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
                 {{ error }}
             {% endfor %}
-        {% endfor %}
-        {% for error in form.non_field_errors %}
-            {{ error }}
-        {% endfor %}
-    {% endif %}
+        {% endif %}
+    </div>
 {% endblock content %}
 {% include "footer.html" %}

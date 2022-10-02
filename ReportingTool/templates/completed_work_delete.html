@@ -1,81 +1,89 @@
 {% load static %}
 {% include "header.html" %}
 {% block content %}
-    {% if user.is_authenticated and user.is_head %}
+    <script src="{% static 'ReportingTool/js/prev_page.js' %}"></script>
+    <div class="w-auto p-3">
+        {% if user.is_authenticated and user.is_head %}
+            <div class="page-header">
+                <h3>Record info:</h3>
+            </div>
+            <div class="w-50">
+                <table class="table table-hover">
+                    <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Date:</td>
+                        <td>{{ object.period }}</td>
+                    </tr>
+                    <tr>
+                        <td>Worker:</td>
+                        <td>{{ object.worker }}</td>
+                    </tr>
+                    <tr>
+                        <td>Work done:</td>
+                        <td>{{ object.work_done }}</td>
+                    </tr>
+                    <tr>
+                        <td>Scope:</td>
+                        <td>{{ object.work_scope }}</td>
+                    </tr>
+                    <tr>
+                        <td>Recorded by:</td>
+                        <td>{{ object.record_author }}</td>
+                    </tr>
+                    <tr>
+                        <td>Recorded date:</td>
+                        <td>{{ object.record_date }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Are you sure you want to delete this record?</p>
+            <table>
+                <tbody>
+                <tr>
+                    <form method="post">{% csrf_token %}
+                        <button
+                                style="height:40px;width:40px"
+                                type="submit"
+                                value="Confirm"
+                                class="btn btn-outline-danger"
+                                title="Delete record">
+                            &#10003;
+                        </button>
 
-        <h2>Record info:</h2>
-        <table class="table table-hover">
-            <thead class="table-dark">
-            <tr>
-                <th scope="col">Title</th>
-                <th scope="col">Value</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Date:</td>
-                <td>{{ object.period }}</td>
-            </tr>
-            <tr>
-                <td>Worker:</td>
-                <td>{{ object.worker }}</td>
-            </tr>
-            <tr>
-                <td>Work done:</td>
-                <td>{{ object.work_done }}</td>
-            </tr>
-            <tr>
-                <td>Scope:</td>
-                <td>{{ object.work_scope }}</td>
-            </tr>
-            <tr>
-                <td>Recorded by:</td>
-                <td>{{ object.record_author }}</td>
-            </tr>
-            <tr>
-                <td>Recorded date:</td>
-                <td>{{ object.record_date }}</td>
-            </tr>
-            </tbody>
-        </table>
-        <p>Are you sure you want to delete this record?</p>
-        <table>
-            <tbody>
-            <tr>
-                <button
-                        style="height:40px;width:40px"
-                        class="btn btn-outline-primary"
-                        onclick="location.href='{% url 'completed_work_check' %}'">
-                    &#8416;
-                </button>
-            </tr>
-            <tr> or </tr>
-            <tr>
-                <form method="post">{% csrf_token %}
+                    </form>
+                </tr>
+                &nbsp;
+                <tr>
                     <button
                             style="height:40px;width:40px"
-                            type="submit"
-                            value="Confirm"
-                            class="btn btn-outline-danger">
-                        &#65794;
+                            class="btn btn-outline-primary"
+                            onclick="goPrev()"
+                            title="Cancel">
+                        &#8416;
                     </button>
-
-                </form>
-            </tr>
-            </tbody>
-        </table>
-    {% else %}
-        <p>Sorry, you are not allowed to access this page</p>
-    {% endif %}
-    {% if form.errors %}
-        {% for field in form %}
-            {% for error in field.errors %}
+                </tr>
+                </tbody>
+            </table>
+        {% else %}
+            <p>Sorry, you are not allowed to access this page</p>
+        {% endif %}
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    {{ error }}
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
                 {{ error }}
             {% endfor %}
-        {% endfor %}
-        {% for error in form.non_field_errors %}
-            {{ error }}
-        {% endfor %}
-    {% endif %}
+        {% endif %}
+    </div>
 {% endblock content %}
 {% include "footer.html" %}

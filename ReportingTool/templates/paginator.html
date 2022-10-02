@@ -1,0 +1,18 @@
+{% block content %}
+    {% if is_paginated %}
+        <div class="pagin-text">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </div>
+        {% if page_obj.has_previous %}
+            <div class="btn-small-pagin">
+                <button onclick="location.href='{{ request.path }}?page={{ page_obj.previous_page_number }}'">previous
+                </button>
+            </div>
+        {% endif %}
+        {% if page_obj.has_next %}
+            <div class="btn-small-pagin">
+                <button onclick="location.href='{{ request.path }}?page={{ page_obj.next_page_number }}'">next</button>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock content %}

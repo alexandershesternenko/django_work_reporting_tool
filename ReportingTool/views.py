@@ -1,6 +1,7 @@
 import csv
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -8,7 +9,10 @@ from django.views import View
 
 from ReportingTool.forms.completed_work_forms import CompletedWorkForm
 from ReportingTool.models.completed_work import CompletedWork
+from ReportingTool.models.directory import StructuralDivisions, WorksType
 from django.views.generic import CreateView, UpdateView, DeleteView
+
+from users.models import CustomUser
 
 
 def index(request):
@@ -84,10 +88,6 @@ class RejectCompletedWorkView(LoginRequiredMixin, View):
         return redirect(reverse_lazy('reports_related_struct_unit'))
 
 
-def reports(request):
-    return render(request, 'reports_struct_unit.html')
-
-
 def reports_related(request):
     return render(request, 'reports_related_struct_unit.html')
 
@@ -124,3 +124,82 @@ def export_report(request):
     return response
 
 
+def get_current_user(request):
+    current_user = request.user
+    return current_user
+
+
+def is_valid_query_param(param):
+    return param != '' and param is not None
+
+
+def bootstrapFilterView(request):
+    user = get_current_user(request)
+    qs = CompletedWork.objects.filter(checked_by_head=True).filter(
+        Q(worker__struct_division__head=user) |
+        Q(worker__struct_division__management_unit__head=user) |
+        Q(worker__struct_division__curator=user) |
+        Q(worker__struct_division__management_unit__curator=user)
+    )
+    struct_divisions = StructuralDivisions.objects.filter(
+        Q(head=user) |
+        Q(management_unit__head=user) |
+        Q(curator=user) |
+        Q(management_unit__curator=user)
+    )
+    workers = CustomUser.objects.filter(
+        Q(struct_division__head=user) |
+        Q(struct_division__management_unit__head=user) |
+        Q(struct_division__curator=user) |
+        Q(struct_division__management_unit__curator=user)
+    )
+    workstype = WorksType.objects.filter(
+        Q(available_to__head=user) |
+        Q(available_to__curator=user)
+    ).distinct()
+
+    work_notes_contains_query = request.GET.get('work_notes_contains')
+    work_scope_min = request.GET.get('work_scope_min')
+    work_scope_max = request.GET.get('work_scope_max')
+    period_min = request.GET.get('period_min')
+    period_max = request.GET.get('period_max')
+    struct_division = request.GET.get('struct_division')
+    worker = request.GET.get('worker')
+    work_done = request.GET.get('work_done')
+
+    if is_valid_query_param(work_notes_contains_query):
+        qs = qs.filter(work_notes__icontains=work_notes_contains_query)
+
+    if is_valid_query_param(work_scope_min):
+        qs = qs.filter(work_scope__gte=work_scope_min)
+
+    if is_valid_query_param(work_scope_max):
+        qs = qs.filter(work_scope__lte=work_scope_max)
+
+    if is_valid_query_param(period_min):
+        qs = qs.filter(period__date__gte=period_min)
+
+    if is_valid_query_param(period_max):
+        qs = qs.filter(period__date__lte=period_max)
+
+    if is_valid_query_param(struct_division) and struct_division != 'Choose...':
+        qs = qs.filter(worker__struct_division__name=struct_division)
+
+    if is_valid_query_param(worker) and worker != 'Choose...':
+        qs = qs.filter(worker=worker)
+
+    if is_valid_query_param(work_done) and work_done != 'Choose...':
+        qs = qs.filter(work_done__name=work_done).filter(
+            Q(worker__struct_division__head=user) |
+            Q(worker__struct_division__management_unit__head=user) |
+            Q(worker__struct_division__curator=user) |
+            Q(worker__struct_division__management_unit__curator=user)
+        )
+
+    context = {
+        'queryset': qs,
+        'struct_divisions': struct_divisions,
+        'workers': workers,
+        'workstype': workstype,
+    }
+    return render(request, 'bootstrap_form.html', context)

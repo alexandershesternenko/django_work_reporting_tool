@@ -2,38 +2,50 @@
 {% load crispy_forms_tags %}
 {% include "header.html" %}
 {% block content %}
+    <script src="{% static 'ReportingTool/js/prev_page.js' %}"></script>
     <div class="w-auto p-3">
-        <div class="page-header">
+    <div class="page-header">
+        <div class="text-center">
             <h3>Log in</h3>
         </div>
-        <table>
-            <tr>
-                <form method="post">
-                    {% csrf_token %}
-                    <div style="width:25%">
-                        {{ form | crispy }}
+    </div>
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-auto">
+                    <div class="d-flex pe-auto">
+                        {{ form.username |as_crispy_field }}
                     </div>
-                    <button
-                            style="height:40px;width:50px"
-                            type="submit"
-                            value="sumbit"
-                            class="btn btn-outline-success"
-                            title="Log in">
-                        &#128273;
-                    </button>
-                </form>
-            <tr> or</tr>
-
-            <button
-                    style="height:40px;width:50px"
-                    class="btn btn-outline-primary"
-                    onclick="location.href='{% url 'index' %}'"
-                    title="Cancel">
-                &#8416;
-            </button>
-            </tr>
-        </table>
-        <p><a href="{% url 'password_reset' %}">Reset Password</a></p>
+                    <div class="d-flex pe-auto">
+                        {{ form.password |as_crispy_field }}
+                    </div>
+                    <div class="text-center">
+                        <button
+                                style="height:40px;width:50px"
+                                class="btn btn-outline-primary"
+                                onclick="goPrev()"
+                                title="Cancel">
+                            &#8416;
+                        </button>
+                        <button
+                                style="height:40px;width:50px"
+                                type="submit"
+                                value="sumbit"
+                                class="btn btn-outline-success"
+                                title="Log in">
+                            &#128273;
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="text-center">
+            <p><a href="{% url 'password_reset' %}">Reset Password</a></p>
+        </div>
+            <div class="text-center">
+            <p><a href="{% url 'signup' %}">Sign Up</a></p>
+        </div>
     </div>
 {% endblock content %}
 {% include "footer.html" %}

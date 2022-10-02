@@ -47,6 +47,7 @@
                 </thead>
                 <tbody>
                 {% for object in object_list %}
+
                     {% if object.worker.struct_division.head == user or object.worker.struct_division.management_unit.head == user or object.worker.struct_division.curator == user or object.worker.struct_division.management_unit.curator == user %}
                         {% if object.checked_by_head %}
                             <tr>

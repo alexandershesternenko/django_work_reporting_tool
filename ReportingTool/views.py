@@ -163,7 +163,28 @@ def ReportsFilterView(request):
     period_min = request.GET.get('period_min')
     period_max = request.GET.get('period_max')
     struct_division = request.GET.get('struct_division')
+
+    # special for worker
     worker = request.GET.get('worker')
+
+    if worker and worker != 'Choose...':
+        middle_name = None
+
+        try:
+            last_name, first_name, middle_name = worker.split()
+            try:
+                worker_get_id = CustomUser.objects.get(last_name=last_name,
+                                                       first_name=first_name,
+                                                       middle_name=middle_name)
+            except  ValueError:
+                worker_get_id = None
+
+        except ValueError:
+            last_name, first_name = worker.split()
+            worker_get_id = CustomUser.objects.get(last_name=last_name,
+                                                   first_name=first_name)
+
+
     work_done = request.GET.get('work_done')
 
     if is_valid_query_param(work_notes_contains_query):
@@ -184,8 +205,9 @@ def ReportsFilterView(request):
     if is_valid_query_param(struct_division) and struct_division != 'Choose...':
         qs = qs.filter(worker__struct_division__name=struct_division)
 
-    if is_valid_query_param(worker) and worker != 'Choose...':
-        qs = qs.filter(worker=worker)
+    if worker:
+        if is_valid_query_param(worker) and worker != 'Choose...':
+            qs = qs.filter(worker=worker_get_id)
 
     if is_valid_query_param(work_done) and work_done != 'Choose...':
         qs = qs.filter(work_done__name=work_done).filter(
@@ -206,5 +228,3 @@ def ReportsFilterView(request):
         return export_report(request)
 
     return render(request, 'reports_related_struct_unit.html', context)
-
-

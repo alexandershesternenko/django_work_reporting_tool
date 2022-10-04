@@ -6876,7 +6876,6 @@ textarea.form-control-lg {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  z-index: 1020;
 }
 
 .sticky-bottom {
@@ -10911,4 +10910,14 @@ textarea.form-control-lg {
   }
 }
 
+.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+
+  > .col,
+  > [class*="col-"] {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
 /*# sourceMappingURL=bootstrap.css.map */

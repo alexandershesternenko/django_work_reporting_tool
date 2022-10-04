@@ -88,10 +88,6 @@ class RejectCompletedWorkView(LoginRequiredMixin, View):
         return redirect(reverse_lazy('reports_related_struct_unit'))
 
 
-def reports_related(request):
-    return render(request, 'reports_related_struct_unit.html')
-
-
 def export_report(request):
     response = HttpResponse(content_type='text/csv')
     writer = csv.writer(response)
@@ -133,7 +129,10 @@ def is_valid_query_param(param):
     return param != '' and param is not None
 
 
-def bootstrapFilterView(request):
+def reports_related(request):
+    return render(request, 'reports_related_struct_unit.html')
+
+def ReportsFilterView(request):
     user = get_current_user(request)
     qs = CompletedWork.objects.filter(checked_by_head=True).filter(
         Q(worker__struct_division__head=user) |
@@ -202,4 +201,10 @@ def bootstrapFilterView(request):
         'workers': workers,
         'workstype': workstype,
     }
-    return render(request, 'bootstrap_form.html', context)
+
+    if 'button_export' in request.GET:
+        return export_report(request)
+
+    return render(request, 'reports_related_struct_unit.html', context)
+
+

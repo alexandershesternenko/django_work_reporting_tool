@@ -1,9 +1,9 @@
 from django.urls import path
 from django_filters.views import FilterView
-from ReportingTool.filters import CompletedWorkFilter, CompletedWorkReportFilter
+from ReportingTool.filters import CompletedWorkFilter
 from ReportingTool import views
 from ReportingTool.views import EditCompletedWorkView, DeleteCompletedWorkView, AcceptCompletedWorkView, \
-    RejectCompletedWorkView, export_report, bootstrapFilterView
+    RejectCompletedWorkView, ReportsFilterView, export_report
 
 urlpatterns = [
 
@@ -37,11 +37,10 @@ urlpatterns = [
          name='completed_work_check'),
 
 
-    path('reports_related_struct_unit',
-         FilterView.as_view(
-             filterset_class=CompletedWorkReportFilter,
-             template_name='reports_related_struct_unit.html'),
+    path('reports_related_struct_unit/',
+         ReportsFilterView,
          name='reports_related_struct_unit'),
+
 
     path('<int:pk>/accept',
          AcceptCompletedWorkView.as_view(),
@@ -55,8 +54,5 @@ urlpatterns = [
          export_report,
          name='export_report'),
 
-    path('boot/',
-        bootstrapFilterView,
-        name='boot'),
 
 ]

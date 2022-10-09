@@ -3,7 +3,8 @@ from django_filters.views import FilterView
 from ReportingTool.filters import CompletedWorkFilter
 from ReportingTool import views
 from ReportingTool.views import EditCompletedWorkView, DeleteCompletedWorkView, AcceptCompletedWorkView, \
-    RejectCompletedWorkView, ReportsFilterView, export_report
+    RejectCompletedWorkView, export_report, ToTrashCompletedWorkView, \
+    reports_filter_view, completed_work_check_filter_view, trash_filter_view, RestoreCompletedWorkView
 
 urlpatterns = [
 
@@ -30,15 +31,20 @@ urlpatterns = [
     path('<int:pk>/delete', DeleteCompletedWorkView.as_view(),
          name='completed_work_delete'),
 
-    path('completed_work_check',
-         FilterView.as_view(
-             filterset_class=CompletedWorkFilter,
-             template_name='completed_work_check.html'),
+    path('completed_work_check/',
+         completed_work_check_filter_view,
          name='completed_work_check'),
 
+    path('completed_work_trash/',
+         trash_filter_view,
+         name='completed_work_trash'),
+
+    path('<int:pk>/restore',
+         RestoreCompletedWorkView.as_view(),
+         name='completed_work_restore'),
 
     path('reports_related_struct_unit/',
-         ReportsFilterView,
+         reports_filter_view,
          name='reports_related_struct_unit'),
 
 
@@ -49,6 +55,10 @@ urlpatterns = [
     path('<int:pk>/reject',
          RejectCompletedWorkView.as_view(),
          name='completed_work_reject'),
+
+    path('<int:pk>/totrash',
+         ToTrashCompletedWorkView.as_view(),
+         name='completed_work_totrash'),
 
     path('export_report',
          export_report,

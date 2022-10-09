@@ -1,3 +1,5 @@
+import datetime
+
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -23,10 +25,15 @@ class CompletedWork(models.Model):
     )
     record_date = models.DateTimeField(auto_now=True)
     checked_by_head = models.BooleanField(default=False)
-
+    active = models.BooleanField(default=True)
 
     def __repr__(self):
         return f'{self.period}, {self.worker}, {self.work_done}'
 
     def __str__(self):
         return self.__repr__()
+
+    def is_active(self):
+        if self.active:
+            return True
+        return False

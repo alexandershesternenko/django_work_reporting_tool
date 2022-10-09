@@ -1,12 +1,12 @@
 from django import forms
-from django.utils.timezone import now
-
 from ReportingTool.models.completed_work import *
-from ReportingTool.models.directory import WorksType, Period, StructuralDivisions
+from ReportingTool.models.directory import WorksType, StructuralDivisions, Period
+from ReportingTool.widget import DatePickerInput
 from users.models import CustomUser
 
 
 class CompletedWorkForm(forms.ModelForm):
+
     class Meta:
         model = CompletedWork
         fields = (
@@ -15,13 +15,16 @@ class CompletedWorkForm(forms.ModelForm):
             'work_done',
             'work_scope',
             'work_notes',
+    )
 
-        )
+        widgets = {
+            'period': DatePickerInput(),
+        }
 
     def __init__(self, user, *args, **kwargs):
-
         if kwargs.get('record_author'):
             self.user = kwargs.pop('record_author')
+
         super(CompletedWorkForm, self).__init__(*args, **kwargs)
 
         if user.struct_division:
@@ -58,3 +61,5 @@ class CompletedWorkForm(forms.ModelForm):
             obj.user = self.instance.record_author
             obj.save()
         return obj
+
+

@@ -4,7 +4,7 @@
     <script src="{% static 'ReportingTool/js/sort_text.js' %}"></script>
     <script src="{% static 'ReportingTool/js/sort_number.js' %}"></script>
     <div class="w-auto p-3">
-        {% if user.is_authenticated %}
+        {% if user.is_superuser %}
             <div class="container-fluid">
                 <div class="row g-4">
                     <div class="col-2">
@@ -76,13 +76,6 @@
                                                 title="Search">
                                             &#128269;
                                         </button>
-                                        <button
-                                                name="button_export"
-                                                class="btn btn-outline-secondary w-100"
-                                                onclick=" location.href='{% url 'export_report' %}'"
-                                                title="Export csv">
-                                            &#128190;
-                                        </button>
                                     </div>
                                 </div>
                             </form>
@@ -123,16 +116,16 @@
                                     <td>{{ record.work_done.time_norm }}</td>
                                     <td>{{ record.work_done.measure }}</td>
                                     <td>{{ record.work_notes }}</td>
-                                    {% if user.is_head %}
+                                    {% if user.is_superuser %}
                                         <td>
-                                            <form method="post" action="{% url 'completed_work_reject' record.pk %}">
+                                            <form method="post" action="{% url 'completed_work_restore' record.pk %}">
                                                 {% csrf_token %}
                                                 <button
                                                         class="btn btn-outline-warning"
                                                         style="height:40px;width:40px"
                                                         type="submit"
                                                         value="sumbit"
-                                                        title="Reject record">
+                                                        title="Restore record">
                                                     &#65794;
                                                 </button>
                                             </form>

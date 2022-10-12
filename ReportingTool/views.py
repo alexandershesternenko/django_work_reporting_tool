@@ -1,5 +1,4 @@
 import csv
-
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -8,6 +7,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
+from django.core.mail import send_mail
+from django.conf import settings
 
 from ReportingTool.forms.completed_work_forms import CompletedWorkForm
 from ReportingTool.models.completed_work import CompletedWork
@@ -436,3 +437,19 @@ def reports_filter_view(request):
         return export_report(request)
 
     return render(request, 'reports_related_struct_unit.html', context)
+
+
+def send_your_email(request):
+    subject = 'Thank you for registering to our site'
+    message = ' it  means a world to us '
+    from_email = settings.EMAIL_HOST_USER
+    recipient_list = ['alexander.shesternenko@gmail.com']
+    send_mail(
+        subject,
+        message,
+        from_email,
+        recipient_list,
+        fail_silently=False
+    )
+
+    return redirect('user_info')

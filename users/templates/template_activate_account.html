@@ -1,0 +1,9 @@
+{% autoescape off %}
+Hi {{ user.last_name }} {{ user.first_name }} {{ user.middle_name }}!
+We received a request to register in the ReportingTool program under the nickname {{ user.username }} from you.
+
+If you want to confirm this action please click on the link below:
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+If it wasn't you, just ignore this email.
+{% endautoescape %}

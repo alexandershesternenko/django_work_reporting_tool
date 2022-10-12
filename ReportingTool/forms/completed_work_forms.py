@@ -1,6 +1,6 @@
 from django import forms
 from ReportingTool.models.completed_work import *
-from ReportingTool.models.directory import WorksType, StructuralDivisions, Period
+from ReportingTool.models.directory import WorksType, StructuralDivisions
 from ReportingTool.widget import DatePickerInput
 from users.models import CustomUser
 

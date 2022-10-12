@@ -69,13 +69,17 @@ class CompletedWorkAdmin(admin.ModelAdmin):
     )
     ordering = ['period', 'worker']
     search_fields = ('worker__last_name', 'worker__first_name', 'worker__middle_name', 'work_done__name')
-
+    #
     # def get_form(self, request, *args, **kwargs):
     #     # import pdb
     #     # pdb.set_trace()
     #     kwargs = super(CompletedWorkAdmin, self).get_form(request, **kwargs)
     #     kwargs['user'] = request.user
     #     return kwargs
+
+    def __init__(self, model, admin_site):
+
+        super().__init__(model, admin_site)
 
     def save_model(self, request, obj, form, change):
         obj.record_author = request.user

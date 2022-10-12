@@ -1,10 +1,11 @@
+from django.core.mail import send_mail
 from django.urls import path
 from django_filters.views import FilterView
 from ReportingTool.filters import CompletedWorkFilter
 from ReportingTool import views
 from ReportingTool.views import EditCompletedWorkView, DeleteCompletedWorkView, AcceptCompletedWorkView, \
     RejectCompletedWorkView, export_report, ToTrashCompletedWorkView, \
-    reports_filter_view, completed_work_check_filter_view, trash_filter_view, RestoreCompletedWorkView
+    reports_filter_view, completed_work_check_filter_view, trash_filter_view, RestoreCompletedWorkView, send_your_email
 
 urlpatterns = [
 
@@ -63,6 +64,10 @@ urlpatterns = [
     path('export_report',
          export_report,
          name='export_report'),
+
+    path('send_your_email/',
+         send_your_email,
+         name='send_your_email'),
 
 
 ]

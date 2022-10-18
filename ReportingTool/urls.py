@@ -1,7 +1,7 @@
 from django.core.mail import send_mail
 from django.urls import path
 from django_filters.views import FilterView
-from ReportingTool.filters import CompletedWorkFilter
+from ReportingTool.filters import CompletedWorkFilter, UserFilter
 from ReportingTool import views
 from ReportingTool.views import EditCompletedWorkView, DeleteCompletedWorkView, AcceptCompletedWorkView, \
     RejectCompletedWorkView, export_report, ToTrashCompletedWorkView, \
@@ -17,7 +17,7 @@ urlpatterns = [
 
     path('completed_work_list',
          FilterView.as_view(
-             filterset_class=CompletedWorkFilter,
+             filterset_class=UserFilter,
              template_name='completed_work_list.html'),
          name='completed_work_list'),
 

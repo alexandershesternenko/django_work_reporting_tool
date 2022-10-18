@@ -289,7 +289,7 @@ def trash_filter_view(request):
                 worker_get_id = CustomUser.objects.get(last_name=last_name,
                                                        first_name=first_name,
                                                        middle_name=middle_name)
-            except  ValueError:
+            except ValueError:
                 worker_get_id = None
 
         except ValueError:
@@ -386,7 +386,7 @@ def reports_filter_view(request):
                 worker_get_id = CustomUser.objects.get(last_name=last_name,
                                                        first_name=first_name,
                                                        middle_name=middle_name)
-            except  ValueError:
+            except ValueError:
                 worker_get_id = None
 
         except ValueError:

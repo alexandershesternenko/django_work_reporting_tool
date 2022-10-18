@@ -3,6 +3,7 @@
 {% block content %}
     <script src="{% static 'ReportingTool/js/sort_text.js' %}"></script>
     <script src="{% static 'ReportingTool/js/sort_number.js' %}"></script>
+    <script src="{% static 'ReportingTool/js/select.js' %}"></script>
     <div class="w-auto p-3">
         {% if user.is_authenticated %}
             <div class="container-fluid">
@@ -16,7 +17,7 @@
                             <p>You can set different filters and save the results to file</p>
                         </div>
                         <div class="row sticky-top">
-                            <form method="GET" , action=".">
+                            <form method="GET" action=".">
                                 <div class="row">
                                     <div class="border border-2 p-2 g-2">
                                         <label for="periodMin">Start date</label>
@@ -30,12 +31,10 @@
                                         <label for="structDivisions">Structural divisions</label>
                                         <select id="structDivisions" class="form-select form-select-sm"
                                                 name="struct_division">
-                                            <option selected>
-                                                Choose...
-                                            </option>
+                                        <option selected>Choose...</option>
                                             {% for SD in struct_divisions %}
-                                                <option value="{{ SD }}">{{ SD }}</option>
-                                            {% endfor %}
+                                                <option id="{{ SD.id }}" value="{{ SD }}"> {{ SD }}</option>
+                                        {% endfor %}
                                         </select>
 
                                         <label for="workers">Worker</label>
@@ -149,5 +148,28 @@
             <p>Sorry, you are not allowed to access this page</p>
         {% endif %}
     </div>
+<div>
+
+    <script>
+let selItems = JSON.parse(sessionStorage.getItem("SelItem")) || [];
+
+$(function() {
+  if (selItems) {
+    selItems.forEach(obj => {
+      const [k, v] = Object.entries(obj)[0]
+      $("#" + k).val(v)
+    })
+  }
+  $('.form-select').on("change", function() {
+    selItems = $('.form-select').map(function() {
+      return { [this.id]: this.value }
+    }).get();
+      sessionStorage.setItem("SelItem", JSON.stringify(selItems))
+
+
+
+  });
+});
+    </script>
 {% endblock content %}
 {% include "footer.html" %}

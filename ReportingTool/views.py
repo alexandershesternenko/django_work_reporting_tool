@@ -176,6 +176,56 @@ def reports_related(request):
     return render(request, 'reports_related_struct_unit.html')
 
 
+def completed_work_list_view(request):
+    user = get_current_user(request)
+    qs = CompletedWork.objects.filter(active=True, worker=user)
+    workstype = WorksType.objects.filter(
+        Q(available_to__head=user)
+    ).distinct()
+
+    work_notes_contains_query = request.GET.get('work_notes_contains')
+    work_scope_min = request.GET.get('work_scope_min')
+    work_scope_max = request.GET.get('work_scope_max')
+    period_min = request.GET.get('period_min')
+    period_max = request.GET.get('period_max')
+    work_done = request.GET.get('work_done')
+    checked_by_head = request.GET.get('checked_by_head')
+
+    if is_valid_query_param(work_notes_contains_query):
+        qs = qs.filter(work_notes__icontains=work_notes_contains_query)
+
+    if is_valid_query_param(work_scope_min):
+        qs = qs.filter(work_scope__gte=work_scope_min)
+
+    if is_valid_query_param(work_scope_max):
+        qs = qs.filter(work_scope__lte=work_scope_max)
+
+    if is_valid_query_param(period_min):
+        qs = qs.filter(period__date__gte=period_min)
+
+    if is_valid_query_param(period_max):
+        qs = qs.filter(period__date__lte=period_max)
+
+    if is_valid_query_param(work_done) and work_done != 'Choose...':
+        qs = qs.filter(work_done__name=work_done).filter(
+            Q(worker__struct_division__head=user) |
+            Q(worker__struct_division__management_unit__head=user) |
+            Q(worker__struct_division__curator=user) |
+            Q(worker__struct_division__management_unit__curator=user)
+        )
+
+    if is_valid_query_param(checked_by_head) and checked_by_head != 'Choose...':
+        qs = qs.filter(checked_by_head__exact=checked_by_head)
+
+    context = {
+        'queryset': qs,
+        'workstype': workstype,
+        'checkedbyhead': checked_by_head,
+    }
+
+    return render(request, 'completed_work_list.html', context)
+
+
 def completed_work_check_filter_view(request):
     user = get_current_user(request)
     qs = CompletedWork.objects.filter(checked_by_head=False, active=True).filter(

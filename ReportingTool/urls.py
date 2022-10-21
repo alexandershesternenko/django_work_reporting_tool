@@ -5,7 +5,8 @@ from ReportingTool.filters import CompletedWorkFilter, UserFilter
 from ReportingTool import views
 from ReportingTool.views import EditCompletedWorkView, DeleteCompletedWorkView, AcceptCompletedWorkView, \
     RejectCompletedWorkView, export_report, ToTrashCompletedWorkView, \
-    reports_filter_view, completed_work_check_filter_view, trash_filter_view, RestoreCompletedWorkView, send_your_email
+    reports_filter_view, completed_work_check_filter_view, trash_filter_view, RestoreCompletedWorkView, send_your_email, \
+    completed_work_list_view
 
 urlpatterns = [
 
@@ -15,10 +16,8 @@ urlpatterns = [
              template_name='index.html'),
          name='index'),
 
-    path('completed_work_list',
-         FilterView.as_view(
-             filterset_class=UserFilter,
-             template_name='completed_work_list.html'),
+    path('completed_work_list/',
+         completed_work_list_view,
          name='completed_work_list'),
 
     path('add',

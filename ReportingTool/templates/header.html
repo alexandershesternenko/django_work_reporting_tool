@@ -4,22 +4,15 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
                 crossorigin="anonymous"></script>
-        <!-- CSS only -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
               crossorigin="anonymous">
-        {#        <link rel="stylesheet" href="{% static 'ReportingTool/css/style.css' %}" type="text/css">#}
         <title>ReportingTool&trade;</title>
     </head>
     <header>
         <nav class="navbar navbar-expand-lg bg-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{% url 'index' %}">ReportingTool&trade;</a>
-                {#                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"#}
-                {#                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"#}
-                {#                        aria-expanded="false" aria-label="Toggle navigation">#}
-                {#                    <span class="navbar-toggler-icon"></span>#}
-                {#                </button>#}
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         {% if user.is_authenticated %}
@@ -29,16 +22,19 @@
                                     {{ user.username }}
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li>
-                                        <a class="dropdown-item" href="{% url 'completed_work_add' %}">
-                                            Add new record
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="{% url 'completed_work_list' %}">
-                                            List of completed work
-                                        </a>
-                                    </li>
+                                    {% if not user.is_superuser %}
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'completed_work_add' %}">
+                                                Add new record
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'completed_work_list' %}">
+                                                List of completed work
+                                            </a>
+                                        </li>
+                                    {% endif %}
                                     <li>
                                         <a class="dropdown-item" href="{% url 'user_info' %}">User info</a>
                                     </li>
@@ -84,11 +80,13 @@
                                             </a>
                                         </li>
                                     {% endif %}
-                                    <li>
-                                        <a class="dropdown-item" href="{% url 'reports_related_struct_unit' %}">
-                                            Related structural units
-                                        </a>
-                                    </li>
+                                    {% if user.is_head or user.is_curator %}
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'reports_related_struct_unit' %}">
+                                                Related structural units
+                                            </a>
+                                        </li>
+                                    {% endif %}
                                 </ul>
                             </li>
                         {% else %}

@@ -10,25 +10,23 @@
                     <div class="col-2">
                         <div class="row border border-2 p-2">
                             <h3>Info</h3>
-                            <p>You see only those completed works that
-                                are confirmed by the heads of structural divisions
-                                and are available for display to the {{ user }}.</p>
-                            <p>You can set different filters and save the results to file</p>
+                            <p>As admin you see all records that have been deleted. You can restore them.</p>
+                            <p>You can set different filters and save the results to file.</p>
                         </div>
                         <div class="row sticky-top">
                             <form method="GET" , action=".">
                                 <div class="row">
                                     <div class="border border-2 p-2 g-2">
                                         <label for="periodMin">Start date</label>
-                                        <input type="date" class="form-select form-select-sm" id="periodMin"
+                                        <input type="date" class="myselect form-select form-select-sm" id="periodMin"
                                                name="period_min">
                                         <label for="periodMax">End date</label>
-                                        <input type="date" class="form-select form-select-sm" id="periodMax"
+                                        <input type="date" class="myselect form-select form-select-sm" id="periodMax"
                                                name="period_max">
                                     </div>
                                     <div class="border border-2 p-2 g-2">
                                         <label for="structDivisions">Structural divisions</label>
-                                        <select id="structDivisions" class="form-select form-select-sm"
+                                        <select id="structDivisions" class="myselect form-select form-select-sm"
                                                 name="struct_division">
                                             <option selected>
                                                 Choose...
@@ -39,7 +37,7 @@
                                         </select>
 
                                         <label for="workers">Worker</label>
-                                        <select id="workers" class="form-select form-select-sm" name="worker">
+                                        <select id="workers" class="myselect form-select form-select-sm" name="worker">
                                             <option selected>Choose...</option>
                                             {% for worker in workers %}
                                                 <option value="{{ worker }}">{{ worker }}</option>
@@ -49,7 +47,8 @@
                                     <div class="border border-2 p-2 g-2">
 
                                         <label for="workDone">Work done</label>
-                                        <select class="form-select form-select-sm" id="workDone" name="work_done">
+                                        <select class="myselect form-select form-select-sm" id="workDone"
+                                                name="work_done">
                                             <option selected>Choose...</option>
                                             {% for work in workstype %}
                                                 <option value="{{ work }}">{{ work }}</option>
@@ -57,15 +56,17 @@
                                         </select>
 
                                         <label for="scope_min">Scope min</label>
-                                        <input type="number" min=0 class="form-control form-control-sm" id="scope_min"
+                                        <input type="number" min=0 class="myselect form-control form-control-sm"
+                                               id="scope_min"
                                                name="work_scope_min">
 
                                         <label for="scope_max">Scope max</label>
-                                        <input type="number" min=0 class="form-control form-control-sm" id="scope_max"
+                                        <input type="number" min=0 class="myselect form-control form-control-sm"
+                                               id="scope_max"
                                                name="work_scope_max">
 
                                         <label for="notes">Notes contains</label>
-                                        <input type="text" class="form-control form-control-sm" id="notes"
+                                        <input type="text" class="myselect form-control form-control-sm" id="notes"
                                                name="work_notes_contains">
                                     </div>
                                     <div class="row border border-2 p-2 g-2">
@@ -82,62 +83,87 @@
                         </div>
                     </div>
                     <div class="col-10">
-                        <table class="table table-hover" id="DataFromBase">
-                            <thead class="table-dark">
-                            <tr>
-                                <th scope="col" onclick="sortNumber()">&#9650;</th>
-                                <th scope="col" onclick="sortTable(1)">Date &diams;</th>
-                                <th scope="col" onclick="sortTable(2)">Main SD &diams;</th>
-                                <th scope="col" onclick="sortTable(3)">Sub SD &diams;</th>
-                                <th scope="col" onclick="sortTable(4)">Worker &diams;</th>
-                                <th scope="col" onclick="sortTable(5)">Type of work done &diams;</th>
-                                <th scope="col">Scope</th>
-                                <th scope="col">TimeNorm</th>
-                                <th scope="col">Measure</th>
-                                <th scope="col">Notes</th>
-                                <th scope="col"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for record in queryset %}
+                        {% if queryset %}
+                            <table class="table table-hover" id="DataFromBase">
+                                <thead class="table-dark">
                                 <tr>
-                                    <td>{{ forloop.counter }}</td>
-                                    <td>{{ record.period }}</td>
-                                    {% if record.worker.struct_division.management_unit == None %}
-                                        <td>{{ record.worker.struct_division }}</td>
-                                        <td></td>
-                                    {% else %}
-                                        <td>{{ record.worker.struct_division.management_unit }}</td>
-                                        <td>{{ record.worker.struct_division }}</td>
-                                    {% endif %}
-                                    <td>{{ record.worker }}</td>
-                                    <td>{{ record.work_done }}</td>
-                                    <td>{{ record.work_scope }}</td>
-                                    <td>{{ record.work_done.time_norm }}</td>
-                                    <td>{{ record.work_done.measure }}</td>
-                                    <td>{{ record.work_notes }}</td>
-                                    {% if user.is_superuser %}
-                                        <td>
-                                            <form method="post" action="{% url 'completed_work_restore' record.pk %}">
-                                                {% csrf_token %}
-                                                <button
-                                                        class="btn btn-outline-warning"
-                                                        style="height:40px;width:40px"
-                                                        type="submit"
-                                                        value="sumbit"
-                                                        title="Restore record">
-                                                    &#65794;
-                                                </button>
-                                            </form>
-                                        </td>
-                                    {% endif %}
+                                    <th scope="col" onclick="sortNumber()">&#9650;</th>
+                                    <th scope="col" onclick="sortTable(1)">Date &diams;</th>
+                                    <th scope="col" onclick="sortTable(2)">Main SD &diams;</th>
+                                    <th scope="col" onclick="sortTable(3)">Sub SD &diams;</th>
+                                    <th scope="col" onclick="sortTable(4)">Worker &diams;</th>
+                                    <th scope="col" onclick="sortTable(5)">Type of work done &diams;</th>
+                                    <th scope="col">Scope</th>
+                                    <th scope="col">TimeNorm</th>
+                                    <th scope="col">Measure</th>
+                                    <th scope="col">Notes</th>
+                                    <th scope="col"></th>
                                 </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                {% for record in queryset %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ record.period }}</td>
+                                        {% if record.worker.struct_division.management_unit == None %}
+                                            <td>{{ record.worker.struct_division }}</td>
+                                            <td></td>
+                                        {% else %}
+                                            <td>{{ record.worker.struct_division.management_unit }}</td>
+                                            <td>{{ record.worker.struct_division }}</td>
+                                        {% endif %}
+                                        <td>{{ record.worker }}</td>
+                                        <td>{{ record.work_done }}</td>
+                                        <td>{{ record.work_scope }}</td>
+                                        <td>{{ record.work_done.time_norm }}</td>
+                                        <td>{{ record.work_done.measure }}</td>
+                                        <td>{{ record.work_notes }}</td>
+                                        {% if user.is_superuser %}
+                                            <td>
+                                                <form method="post"
+                                                      action="{% url 'completed_work_restore' record.pk %}">
+                                                    {% csrf_token %}
+                                                    <button
+                                                            class="btn btn-outline-warning"
+                                                            style="height:40px;width:40px"
+                                                            type="submit"
+                                                            value="sumbit"
+                                                            title="Restore record">
+                                                        &#65794;
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p>No record to show.</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
+            <script>
+                let selItems = JSON.parse(sessionStorage.getItem("SelItem")) || [];
+
+                $(function () {
+                    if (selItems) {
+                        selItems.forEach(obj => {
+                            const [k, v] = Object.entries(obj)[0]
+                            $("#" + k).val(v)
+                        })
+                    }
+                    $('.myselect').on("change", function () {
+                        selItems = $('.myselect').map(function () {
+                            return {[this.id]: this.value}
+                        }).get();
+                        sessionStorage.setItem("SelItem", JSON.stringify(selItems))
+
+
+                    });
+                });
+            </script>
         {% else %}
             <p>Sorry, you are not allowed to access this page</p>
         {% endif %}

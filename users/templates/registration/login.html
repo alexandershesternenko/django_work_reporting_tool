@@ -14,14 +14,16 @@
             {% csrf_token %}
             <div class="row d-flex justify-content-center">
                 <div class="col-md-auto">
-                    <div class="d-flex pe-auto">
+                    <div>
                         {{ form.username |as_crispy_field }}
                     </div>
-                    <div class="d-flex pe-auto">
+                    <div>
                         {{ form.password |as_crispy_field }}
                     </div>
-                    <div class="d-flex pe-auto">
-                        {{ form.captcha |as_crispy_field }}
+                    <div class="text-center">
+                        <div class="btn">
+                            {{ form.captcha |as_crispy_field }}
+                        </div>
                     </div>
                     <div class="text-center">
                         <button

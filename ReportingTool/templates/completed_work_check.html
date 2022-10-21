@@ -12,21 +12,23 @@
                         <h3>Info</h3>
                         <p>You see only those completed works that
                             needed to be checked by {{ user }}.</p>
+                        <p>You can accept, edit or delete record.</p>
+                        <p>You can set different filters.</p>
                     </div>
                     <div class="row sticky-top">
                         <form method="GET" , action=".">
                             <div class="row">
                                 <div class="border border-2 p-2 g-2">
                                     <label for="periodMin">Start date</label>
-                                    <input type="date" class="form-select form-select-sm" id="periodMin"
+                                    <input type="date" class="myselect form-select form-select-sm" id="periodMin"
                                            name="period_min">
                                     <label for="periodMax">End date</label>
-                                    <input type="date" class="form-select form-select-sm" id="periodMax"
+                                    <input type="date" class="myselect form-select form-select-sm" id="periodMax"
                                            name="period_max">
                                 </div>
                                 <div class="border border-2 p-2 g-2">
                                     <label for="structDivisions">Structural divisions</label>
-                                    <select id="structDivisions" class="form-select form-select-sm"
+                                    <select id="structDivisions" class="myselect form-select form-select-sm"
                                             name="struct_division">
                                         <option selected>
                                             Choose...
@@ -37,7 +39,7 @@
                                     </select>
 
                                     <label for="workers">Worker</label>
-                                    <select id="workers" class="form-select form-select-sm" name="worker">
+                                    <select id="workers" class="myselect form-select form-select-sm" name="worker">
                                         <option selected>Choose...</option>
                                         {% for worker in workers %}
                                             <option value="{{ worker }}">{{ worker }}</option>
@@ -47,7 +49,7 @@
                                 <div class="border border-2 p-2 g-2">
 
                                     <label for="workDone">Work done</label>
-                                    <select class="form-select form-select-sm" id="workDone" name="work_done">
+                                    <select class="myselect form-select form-select-sm" id="workDone" name="work_done">
                                         <option selected>Choose...</option>
                                         {% for work in workstype %}
                                             <option value="{{ work }}">{{ work }}</option>
@@ -55,15 +57,17 @@
                                     </select>
 
                                     <label for="scope_min">Scope min</label>
-                                    <input type="number" min=0 class="form-control form-control-sm" id="scope_min"
+                                    <input type="number" min=0 class="myselect form-control form-control-sm"
+                                           id="scope_min"
                                            name="work_scope_min">
 
                                     <label for="scope_max">Scope max</label>
-                                    <input type="number" min=0 class="form-control form-control-sm" id="scope_max"
+                                    <input type="number" min=0 class="myselect form-control form-control-sm"
+                                           id="scope_max"
                                            name="work_scope_max">
 
                                     <label for="notes">Notes contains</label>
-                                    <input type="text" class="form-control form-control-sm" id="notes"
+                                    <input type="text" class="myselect form-control form-control-sm" id="notes"
                                            name="work_notes_contains">
                                 </div>
                                 <div class="row border border-2 p-2 g-2">
@@ -80,197 +84,111 @@
                     </div>
                 </div>
                 <div class="col-10">
-                    <table class="table table-hover" id="DataFromBase">
-                        <thead class="table-dark">
-                        <tr>
-                            <th scope="col" onclick="sortNumber()">&#9650;</th>
-                            <th scope="col" onclick="sortTable(1)">Date &diams;</th>
-                            <th scope="col" onclick="sortTable(2)">Main SD &diams;</th>
-                            <th scope="col" onclick="sortTable(3)">Sub SD &diams;</th>
-                            <th scope="col" onclick="sortTable(4)">Worker &diams;</th>
-                            <th scope="col" onclick="sortTable(5)">Type of work done &diams;</th>
-                            <th scope="col">Scope</th>
-                            <th scope="col">TimeNorm</th>
-                            <th scope="col">Measure</th>
-                            <th scope="col">Notes</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for record in queryset %}
+                    {% if queryset %}
+                        <table class="table table-hover" id="DataFromBase">
+                            <thead class="table-dark">
                             <tr>
-                                <td>{{ forloop.counter }}</td>
-                                <td>{{ record.period }}</td>
-                                {% if record.worker.struct_division.management_unit == None %}
-                                    <td>{{ record.worker.struct_division }}</td>
-                                    <td></td>
-                                {% else %}
-                                    <td>{{ record.worker.struct_division.management_unit }}</td>
-                                    <td>{{ record.worker.struct_division }}</td>
-                                {% endif %}
-                                <td>{{ record.worker }}</td>
-                                <td>{{ record.work_done }}</td>
-                                <td>{{ record.work_scope }}</td>
-                                <td>{{ record.work_done.time_norm }}</td>
-                                <td>{{ record.work_done.measure }}</td>
-                                <td>{{ record.work_notes }}</td>
-                                {% if user.is_head %}
-                                    <td>
-                                        <form method="post" action="{% url 'completed_work_accept' record.pk %}">
-                                            {% csrf_token %}
-                                            <button style="height:40px;width:40px"
-                                                    type="submit" value="sumbit"
-                                                    class="btn btn-outline-success"
-                                                    title="Accept record">
-                                                &#10003;
-                                            </button>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <button style="height:40px;width:40px"
-                                                class="btn btn-outline-primary"
-                                                onclick=
-                                                        "location.href=
-                                                                '{% url 'completed_work_edit' record.pk %}'"
-                                                title="Edit record">
-                                            &#128393;
-                                        </button>
-                                    </td>
-                                    <td>
-                                    <button style="height:40px;width:40px" class="btn btn-outline-danger"
-                                            onclick=
-                                                    "location.href=
-                                                            '{% url 'completed_work_delete' record.pk %}'"
-                                            title="Delete record">
-                                        &#65794;
-                                    </button>
-                                    </td>
-                                {% endif %}
+                                <th scope="col" onclick="sortNumber()">&#9650;</th>
+                                <th scope="col" onclick="sortTable(1)">Date &diams;</th>
+                                <th scope="col" onclick="sortTable(2)">Main SD &diams;</th>
+                                <th scope="col" onclick="sortTable(3)">Sub SD &diams;</th>
+                                <th scope="col" onclick="sortTable(4)">Worker &diams;</th>
+                                <th scope="col" onclick="sortTable(5)">Type of work done &diams;</th>
+                                <th scope="col">Scope</th>
+                                <th scope="col">TimeNorm</th>
+                                <th scope="col">Measure</th>
+                                <th scope="col">Notes</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            {% for record in queryset %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ record.period }}</td>
+                                    {% if record.worker.struct_division.management_unit == None %}
+                                        <td>{{ record.worker.struct_division }}</td>
+                                        <td></td>
+                                    {% else %}
+                                        <td>{{ record.worker.struct_division.management_unit }}</td>
+                                        <td>{{ record.worker.struct_division }}</td>
+                                    {% endif %}
+                                    <td>{{ record.worker }}</td>
+                                    <td>{{ record.work_done }}</td>
+                                    <td>{{ record.work_scope }}</td>
+                                    <td>{{ record.work_done.time_norm }}</td>
+                                    <td>{{ record.work_done.measure }}</td>
+                                    <td>{{ record.work_notes }}</td>
+                                    {% if user.is_head %}
+                                        <td>
+                                            <form method="post" action="{% url 'completed_work_accept' record.pk %}">
+                                                {% csrf_token %}
+                                                <button style="height:40px;width:40px"
+                                                        type="submit" value="sumbit"
+                                                        class="btn btn-outline-success"
+                                                        title="Accept record">
+                                                    &#10003;
+                                                </button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <button style="height:40px;width:40px"
+                                                    class="btn btn-outline-primary"
+                                                    onclick=
+                                                            "location.href=
+                                                                    '{% url 'completed_work_edit' record.pk %}'"
+                                                    title="Edit record">
+                                                &#128393;
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button style="height:40px;width:40px" class="btn btn-outline-danger"
+                                                    onclick=
+                                                            "location.href=
+                                                                    '{% url 'completed_work_delete' record.pk %}'"
+                                                    title="Delete record">
+                                                &#65794;
+                                            </button>
+                                        </td>
+                                    {% else %}
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p>No record to show.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
+        <script>
+            let selItems = JSON.parse(sessionStorage.getItem("SelItem")) || [];
+
+            $(function () {
+                if (selItems) {
+                    selItems.forEach(obj => {
+                        const [k, v] = Object.entries(obj)[0]
+                        $("#" + k).val(v)
+                    })
+                }
+                $('.myselect').on("change", function () {
+                    selItems = $('.myselect').map(function () {
+                        return {[this.id]: this.value}
+                    }).get();
+                    sessionStorage.setItem("SelItem", JSON.stringify(selItems))
+
+
+                });
+            });
+        </script>
     {% else %}
         <p>Sorry, you are not allowed to access this page</p>
     {% endif %}
-
-
-
-
-    {#            <div class="page-header">#}
-    {#                <h3>Completed work should be checked by {{ user }}</h3>#}
-    {#            </div>#}
-    {#            <form method="get">#}
-    {#                <div class="d-flex pe-auto">#}
-    {#                    {{ filter.form.period}}#}
-    {#                    &nbsp;#}
-    {#                    {{ filter.form.worker__struct_division }}#}
-    {#                    &nbsp;#}
-    {#                    {{ filter.form.worker }}#}
-    {#                </div>#}
-    {##}
-    {#                <div class="d-flex pe-auto">#}
-    {#                    {{ filter.form.work_done }}#}
-    {#                </div>#}
-    {#                <button type="submit"#}
-    {#                        value="sumbit"#}
-    {#                        class="btn btn-outline-secondary"#}
-    {#                        title="Search">#}
-    {#                    &#128269;#}
-    {#                </button>#}
-    {#            </form>#}
-    {#            {% if object_list %}#}
-    {#                <table class="table table-hover" id="DataFromBase">#}
-    {#                <thead class="table-dark">#}
-    {#                <tr>#}
-    {#                    <th scope="col" onclick="sortNumber()">&#9650;</th>#}
-    {#                    <th scope="col" onclick="sortTable(1)">Date &diams;</th>#}
-    {#                    <th scope="col" onclick="sortTable(2)">Main SD &diams;</th>#}
-    {#                    <th scope="col" onclick="sortTable(3)">Sub SD &diams;</th>#}
-    {#                    <th scope="col" onclick="sortTable(4)">Worker &diams;</th>#}
-    {#                    <th scope="col" onclick="sortTable(5)">Type of work done &diams;</th>#}
-    {#                    <th scope="col">Scope</th>#}
-    {#                    <th scope="col">TimeNorm</th>#}
-    {#                    <th scope="col">Measure</th>#}
-    {#                    <th scope="col">Notes</th>#}
-    {#                    <th scope="col"></th>#}
-    {#                    <th scope="col"></th>#}
-    {#                    <th scope="col"></th>#}
-    {#                </tr>#}
-    {#                </thead>#}
-    {#                <tbody>#}
-    {#                {% for object in object_list %}#}
-    {#                    {% if object.worker.struct_division.head == user or object.worker.struct_division.management_unit.head %}#}
-    {#                        {% if not object.checked_by_head %}#}
-    {#                            <tr>#}
-    {#                                <td></td>#}
-    {#                                <td>{{ object.period }}</td>#}
-    {#                                {% if object.worker.struct_division.management_unit == None %}#}
-    {#                                    <td>{{ object.worker.struct_division }}</td>#}
-    {#                                    <td></td>#}
-    {#                                {% else %}#}
-    {#                                    <td>{{ object.worker.struct_division.management_unit }}</td>#}
-    {#                                    <td>{{ object.worker.struct_division }}</td>#}
-    {#                                {% endif %}#}
-    {#                                <td>{{ object.worker }}</td>#}
-    {#                                <td>{{ object.work_done }}</td>#}
-    {#                                <td>{{ object.work_scope }}</td>#}
-    {#                                <td>{{ object.work_done.time_norm }}</td>#}
-    {#                                <td>{{ object.work_done.measure }}</td>#}
-    {#                                <td>{{ object.work_notes }}</td>#}
-    {##}
-    {#                                <td>#}
-    {##}
-    {#                                    <form method="post" action="{% url 'completed_work_accept' object.pk %}">#}
-    {#                                        {% csrf_token %}#}
-    {#                                        <button style="height:40px;width:40px"#}
-    {#                                                type="submit" value="sumbit"#}
-    {#                                                class="btn btn-outline-success"#}
-    {#                                                title="Accept record">#}
-    {#                                            &#10003;#}
-    {#                                        </button>#}
-    {#                                    </form>#}
-    {#                                </td>#}
-    {#                                <td>#}
-    {#                                    <button style="height:40px;width:40px"#}
-    {#                                            class="btn btn-outline-primary"#}
-    {#                                            onclick=#}
-    {#                                                    "location.href=#}
-    {#                                                            '{% url 'completed_work_edit' object.pk %}'"#}
-    {#                                            title="Edit record">#}
-    {#                                        &#128393;#}
-    {#                                    </button>#}
-    {#                                </td>#}
-    {#                                <td>#}
-    {##}
-    {#                                    <button style="height:40px;width:40px" class="btn btn-outline-danger"#}
-    {#                                            onclick=#}
-    {#                                                    "location.href=#}
-    {#                                                            '{% url 'completed_work_delete' object.pk %}'"#}
-    {#                                            title="Delete record">#}
-    {#                                        &#65794;#}
-    {#                                    </button>#}
-    {##}
-    {#                                </td>#}
-    {#                            </tr>#}
-    {#                        {% endif %}#}
-    {#                    {% endif %}#}
-    {#                    </tbody>#}
-    {#                {% endfor %}#}
-    {#            {% else %}#}
-    {#                <p>No objects found.</p>#}
-    {#            {% endif %}#}
-    {#        </table>#}
-    {##}
-    {#        {% else %}#}
-    {#            <p>Sorry, you are not allowed to access this page</p>#}
-    {#        {% endif %}#}
-    {#        <script src="{% static 'ReportingTool/js/rows_count.js' %}"></script>#}
-    {#    </div>#}
 {% endblock content %}
 {% include "footer.html" %}

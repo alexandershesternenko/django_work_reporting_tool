@@ -1,9 +1,10 @@
 from django import forms
 from ..models import CustomUser
+from django.utils.translation import gettext_lazy as _
 
 
 class CustomUserCreateForm(forms.ModelForm):
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password = forms.CharField(label=_('Password'), widget=forms.PasswordInput)
 
     class Meta:
         model = CustomUser

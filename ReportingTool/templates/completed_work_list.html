@@ -1,5 +1,5 @@
+{% load i18n %}
 {% load static %}
-{#{% load crispy_forms_tags %}#}
 {% include "header.html" %}
 {% block content %}
     <script src="{% static 'ReportingTool/js/sort_text.js' %}"></script>
@@ -10,53 +10,53 @@
                 <div class="row g-4">
                     <div class="col-2">
                         <div class="row border border-2 p-2">
-                            <h3>Info</h3>
-                            <p>You see only completed works by {{ user }}.</p>
-                            <p>You can set different filters.</p>
-                            <p>You can edit only non-checked records.</p>
+                            <h3>{% trans "Info" %}</h3>
+                            <p>{% trans "You see only completed works by" %} {{ user }}.</p>
+                            <p>{% trans "You can set different filters" %}.</p>
+                            <p>{% trans "You can edit or delete only non-checked records" %}.</p>
                         </div>
                         <div class="row sticky-top">
                             <form method="GET" action=".">
                                 <div class="row">
                                     <div class="border border-2 p-2 g-2">
-                                        <label for="periodMin">Start date</label>
+                                        <label for="periodMin">{% trans "Start date" %}</label>
                                         <input type="date" class="myselect form-select form-select-sm" id="periodMin"
                                                name="period_min">
-                                        <label for="periodMax">End date</label>
+                                        <label for="periodMax">{% trans "End date" %}</label>
                                         <input type="date" class="myselect form-select form-select-sm" id="periodMax"
                                                name="period_max">
                                     </div>
                                     <div class="border border-2 p-2 g-2">
 
-                                        <label for="workDone">Work done</label>
+                                        <label for="workDone">{% trans "Work done" %}</label>
                                         <select class="myselect form-select form-select-sm" id="workDone"
                                                 name="work_done">
-                                            <option selected>Choose...</option>
+                                            <option selected>{% trans "Choose..." %}</option>
                                             {% for work in workstype %}
                                                 <option value="{{ work }}">{{ work }}</option>
                                             {% endfor %}
                                         </select>
 
-                                        <label for="scope_min">Scope min</label>
+                                        <label for="scope_min">{% trans "Scope min" %}</label>
                                         <input type="number" min=0 class="myselect form-control form-control-sm"
                                                id="scope_min"
                                                name="work_scope_min">
 
-                                        <label for="scope_max">Scope max</label>
+                                        <label for="scope_max">{% trans "Scope max" %}</label>
                                         <input type="number" min=0 class="myselect form-control form-control-sm"
                                                id="scope_max"
                                                name="work_scope_max">
 
-                                        <label for="notes">Notes contains</label>
+                                        <label for="notes">{% trans "Notes contain" %}</label>
                                         <input type="text" class="myselect form-control form-control-sm" id="notes"
                                                name="work_notes_contains">
 
-                                        <label for="checkedByHead">Checked by head</label>
+                                        <label for="checkedByHead">{% trans "Checked by head" %}</label>
                                         <select class="myselect form-select form-select-sm" id="checkedByHead"
                                                 name="checked_by_head">
-                                            <option selected>Choose...</option>
-                                            <option value="True">Checked</option>
-                                            <option value="False">Non-checked</option>
+                                            <option selected>{% trans "Choose..." %}</option>
+                                            <option value="True">{% trans "Checked" %}</option>
+                                            <option value="False">{% trans "Non-checked" %}</option>
                                         </select>
 
 
@@ -66,7 +66,7 @@
                                                 value="sumbit"
                                                 name="button_search"
                                                 class="btn btn-outline-secondary w-100"
-                                                title="Search">
+                                                title="{% trans "Search" %}">
                                             &#128269;
                                         </button>
                                     </div>
@@ -80,16 +80,17 @@
                                 <thead class="table-dark">
                                 <tr>
                                     <th scope="col" onclick="sortNumber()">&#9650;</th>
-                                    <th scope="col" onclick="sortTable(1)">Date &diams;</th>
-                                    <th scope="col" onclick="sortTable(2)">Main SD &diams;</th>
-                                    <th scope="col" onclick="sortTable(3)">Sub SD &diams;</th>
-                                    <th scope="col" onclick="sortTable(4)">Worker &diams;</th>
-                                    <th scope="col" onclick="sortTable(5)">Type of work done &diams;</th>
-                                    <th scope="col">Scope</th>
-                                    <th scope="col">TimeNorm</th>
-                                    <th scope="col">Measure</th>
-                                    <th scope="col">Notes</th>
-                                    <th scope="col" onclick="sortTable(10)">Checked &diams;</th>
+                                    <th scope="col" onclick="sortTable(1)">{% trans "Date" %} &diams;</th>
+                                    <th scope="col" onclick="sortTable(2)">{% trans "Main SD" %} &diams;</th>
+                                    <th scope="col" onclick="sortTable(3)">{% trans "Sub SD" %} &diams;</th>
+                                    <th scope="col" onclick="sortTable(4)">{% trans "Worker" %} &diams;</th>
+                                    <th scope="col" onclick="sortTable(5)">{% trans "Work done" %} &diams;</th>
+                                    <th scope="col">{% trans "Scope" %}</th>
+                                    <th scope="col">{% trans "TimeNorm" %}</th>
+                                    <th scope="col">{% trans "Measure" %}</th>
+                                    <th scope="col">{% trans "Notes" %}</th>
+                                    <th scope="col" onclick="sortTable(10)">{% trans "Checked" %} &diams;</th>
+                                    <th scope="col"></th>
                                     <th scope="col"></th>
                                 </tr>
                                 </thead>
@@ -108,10 +109,32 @@
                                         <td>{{ record.worker }}</td>
                                         <td>{{ record.work_done }}</td>
                                         <td>{{ record.work_scope }}</td>
-                                        <td>{{ record.work_done.time_norm }}</td>
-                                        <td>{{ record.work_done.measure }}</td>
+                                        <td>
+                                            {% if record.work_done.time_norm %}
+                                                {{ record.work_done.time_norm }}
+                                            {% else %}
+                                                {% trans "none" %}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if record.work_done.measure.name == "times" %}
+                                                {% trans "times" %}
+                                            {% elif record.work_done.measure.name == "running meters" %}
+                                                {% trans "running meters" %}
+                                            {% elif record.work_done.measure.name == "pieces" %}
+                                                {% trans "pieces" %}
+                                            {% else %}
+                                                {% trans "none" %}
+                                            {% endif %}
+                                        </td>
                                         <td>{{ record.work_notes }}</td>
-                                        <td>{{ record.checked_by_head }}</td>
+                                        <td>
+                                            {% if record.checked_by_head %}
+                                                {% trans "Yes" %}
+                                            {% else %}
+                                                {% trans "No" %}
+                                            {% endif %}
+                                        </td>
                                         {% if record.checked_by_head == False %}
                                             <td>
                                                 <button style="height:40px;width:40px"
@@ -119,11 +142,21 @@
                                                         onclick=
                                                                 "location.href=
                                                                         '{% url 'completed_work_edit' record.pk %}'"
-                                                        title="Edit record">
+                                                        title="{% trans "Edit record" %}">
                                                     &#128393;
                                                 </button>
                                             </td>
+                                            <td>
+                                                <button style="height:40px;width:40px" class="btn btn-outline-danger"
+                                                        onclick=
+                                                                "location.href=
+                                                                        '{% url 'completed_work_delete' record.pk %}'"
+                                                        title="{% trans "Delete record" %}">
+                                                    &#65794;
+                                                </button>
+                                            </td>
                                         {% else %}
+                                            <td></td>
                                             <td></td>
                                         {% endif %}
                                     </tr>
@@ -131,7 +164,7 @@
                                 </tbody>
                             </table>
                         {% else %}
-                            <p>No record to show.</p>
+                            <p>{% trans "No records to show" %}.</p>
                         {% endif %}
                     </div>
                 </div>
@@ -155,7 +188,7 @@
                 });
             </script>
         {% else %}
-            <p>Sorry, you are not allowed to access this page</p>
+            <p>{% trans "Sorry, you are not allowed to access this page" %}</p>
         {% endif %}
     </div>
 {% endblock content %}

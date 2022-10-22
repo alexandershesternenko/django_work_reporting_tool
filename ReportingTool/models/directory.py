@@ -87,7 +87,7 @@ class WorksTypeMeasure(models.Model):
 
 
 class WorksType(models.Model):
-    name = models.CharField(max_length=120)
+    name = models.CharField(_("Work's name"), max_length=120)
     available_to = models.ManyToManyField(StructuralDivisions)
     time_norm = models.FloatField(blank=True, null=True)  # man-hours
     measure = models.ForeignKey(

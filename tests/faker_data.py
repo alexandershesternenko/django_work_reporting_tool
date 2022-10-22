@@ -25,5 +25,3 @@ class Test:
 if __name__ == "__main__":
     test = Test()
     test.add_fake_users(1)
-
-

@@ -9,6 +9,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.core.mail import send_mail
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 
 from ReportingTool.forms.completed_work_forms import CompletedWorkForm
 from ReportingTool.models.completed_work import CompletedWork
@@ -33,7 +34,6 @@ class CreateCompletedWorkView(LoginRequiredMixin, SuccessMessageMixin, CreateVie
         kwargs = super(CreateCompletedWorkView, self).get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
-
 
     def form_valid(self, form):
         form.instance.record_author = self.request.user
@@ -206,7 +206,7 @@ def completed_work_list_view(request):
     if is_valid_query_param(period_max):
         qs = qs.filter(period__date__lte=period_max)
 
-    if is_valid_query_param(work_done) and work_done != 'Choose...':
+    if is_valid_query_param(work_done) and work_done != _('Choose...'):
         qs = qs.filter(work_done__name=work_done).filter(
             Q(worker__struct_division__head=user) |
             Q(worker__struct_division__management_unit__head=user) |
@@ -214,7 +214,7 @@ def completed_work_list_view(request):
             Q(worker__struct_division__management_unit__curator=user)
         )
 
-    if is_valid_query_param(checked_by_head) and checked_by_head != 'Choose...':
+    if is_valid_query_param(checked_by_head) and checked_by_head != _('Choose...'):
         qs = qs.filter(checked_by_head__exact=checked_by_head)
 
     context = {

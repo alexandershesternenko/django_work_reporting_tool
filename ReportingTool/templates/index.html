@@ -1,9 +1,10 @@
+{% load i18n %}
 {% load static %}
 {% include "header.html" %}
 <div class="w-auto p-3">
 {% if user.is_authenticated %}
-    <p>{{ user.first_name }} welcome in Reporting Tool.</p>
-    <p>This resource was created to automate the preparation and collection of reports.</p>
+    <p>{{ user.first_name }} {% trans "welcome in" %} Reporting Tool.</p>
+    <p>{% trans "This resource was created to automate the preparation and collection of reports." %}</p>
 {% else %}
     <p>You need to <a href="{% url 'login' %}">log in</a> or <a href="{% url 'signup' %}">sign up</a>.</p>
  {% endif %}

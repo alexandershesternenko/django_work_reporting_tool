@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% include "header.html" %}
@@ -6,7 +7,7 @@
     <div class="w-auto p-3">
     <div class="page-header">
         <div class="text-center">
-            <h3>Sign up</h3>
+            <h3>{% trans "Sign up" %}</h3>
         </div>
     </div>
     <div>
@@ -43,7 +44,7 @@
                                 style="height:40px;width:50px"
                                 class="btn btn-outline-primary"
                                 onclick="goPrev()"
-                                title="Cancel">
+                                title="{% trans "Cancel" %}">
                             &#8416;
                         </button>
                         <button
@@ -51,7 +52,7 @@
                                 type="submit"
                                 value="sumbit"
                                 class="btn btn-outline-success"
-                                title="Sign up">
+                                title="{% trans "Sign up" %}">
                             &#128273;
                         </button>
                     </div>
@@ -59,7 +60,7 @@
             </div>
         </form>
         <div class="text-center">
-            <p><a href="{% url 'login' %}">Log in</a></p>
+            <p><a href="{% url 'login' %}">{% trans "Log in" %}</a></p>
         </div>
     </div>
 {% endblock %}

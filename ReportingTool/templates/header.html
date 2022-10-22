@@ -1,3 +1,5 @@
+{% load i18n %}
+{% load static %}
 {% block content %}
     <head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -25,21 +27,25 @@
                                     {% if not user.is_superuser %}
                                         <li>
                                             <a class="dropdown-item" href="{% url 'completed_work_add' %}">
-                                                Add new record
+                                                {% trans "Add new record" %}
                                             </a>
                                         </li>
 
                                         <li>
                                             <a class="dropdown-item" href="{% url 'completed_work_list' %}">
-                                                List of completed work
+                                                {% trans "List of completed work" %}
                                             </a>
                                         </li>
                                     {% endif %}
                                     <li>
-                                        <a class="dropdown-item" href="{% url 'user_info' %}">User info</a>
+                                        <a class="dropdown-item" href="{% url 'user_info' %}">
+                                            {% trans "User info" %}
+                                        </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
+                                        <a class="dropdown-item" href="{% url 'logout' %}">
+                                            {% trans "Log out" %}
+                                        </a>
                                     </li>
                                 </ul>
                             </li>
@@ -47,14 +53,18 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                    aria-expanded="false">
-                                    Anonymous
+                                    {% trans "Anonymous" %}
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a class="dropdown-item" href="{% url 'login' %}">Log in</a>
+                                        <a class="dropdown-item" href="{% url 'login' %}">
+                                            {% trans "Log in" %}
+                                        </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="{% url 'signup' %}">Sign up</a>
+                                        <a class="dropdown-item" href="{% url 'signup' %}">
+                                            {% trans "Sign up" %}
+                                        </a>
                                     </li>
                                 </ul>
                             </li>
@@ -63,27 +73,27 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                    aria-expanded="false">
-                                    Reports
+                                    {% trans "Reports" %}
                                 </a>
                                 <ul class="dropdown-menu">
                                     {% if user.is_head %}
                                         <li>
                                             <a class="dropdown-item" href="{% url 'completed_work_check' %}">
-                                                Approve completed work
+                                                {% trans "Approve completed work" %}
                                             </a>
                                         </li>
                                     {% endif %}
                                     {% if user.is_superuser %}
                                         <li>
                                             <a class="dropdown-item" href="{% url 'completed_work_trash' %}">
-                                                Completed work trash
+                                                {% trans "Completed work in trash" %}
                                             </a>
                                         </li>
                                     {% endif %}
                                     {% if user.is_head or user.is_curator %}
                                         <li>
                                             <a class="dropdown-item" href="{% url 'reports_related_struct_unit' %}">
-                                                Related structural units
+                                                {% trans "Related structural units" %}
                                             </a>
                                         </li>
                                     {% endif %}
@@ -91,18 +101,38 @@
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link disabled">Reports</a>
+                                <a class="nav-link disabled">{% trans "Reports" %}</a>
                             </li>
                         {% endif %}
                         {% if user.is_superuser %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'admin:index' %}">Admin panel</a>
+                                <a class="nav-link" href="{% url 'admin:index' %}">
+                                    {% trans "Admin panel" %}
+                                </a>
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link disabled">Admin panel</a>
+                                <a class="nav-link disabled">
+                                    {% trans "Admin panel" %}
+                                </a>
                             </li>
                         {% endif %}
+                    </ul>
+                <ul class="d-flex list-unstyled">
+                        <li class="nav-item">
+                            <form action="{% url 'set_language' %}" method="post">
+                                {% csrf_token %}
+                                <input name="language" type="hidden" value="uk"/>
+                                <input type="image" src="/static/ReportingTool/img/ukraine.png"/>
+                            </form>
+                        </li>
+                        <li class="nav-item">
+                            <form action="{% url 'set_language' %}" method="post">
+                                {% csrf_token %}
+                                <input name="language" type="hidden" value="en"/>
+                                <input type="image" src="/static/ReportingTool/img/british.png"/>
+                            </form>
+                        </li>
 
                     </ul>
                 </div>
@@ -110,5 +140,11 @@
         </nav>
 
     </header>
+
+
+
+
+
+
     {% include 'messaging.html' %}
 {% endblock content %}

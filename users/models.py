@@ -16,7 +16,7 @@ class CustomUser(AbstractUser, PermissionsMixin):
                                 error_messages={
                                     "unique": _("A user with that username already exists."),
                                 },
-                                help_text='example: ShevchenkoTG'
+                                help_text=_("example: ShevchenkoTG")
                                 )
     first_name = models.CharField(_("First name"), max_length=25)
     last_name = models.CharField(_("Last name"), max_length=25)
@@ -24,10 +24,10 @@ class CustomUser(AbstractUser, PermissionsMixin):
     email = models.EmailField(_("Email"), blank=True)
     profession = models.ForeignKey(directory.Profession,
                                    on_delete=models.SET('deleted profession'),
-                                   verbose_name="Profession", blank=True, null=True)
+                                   verbose_name=_("Profession"), blank=True, null=True)
     struct_division = models.ForeignKey(directory.StructuralDivisions,
                                         on_delete=models.SET('deleted structural division'),
-                                        verbose_name="Structural Divisions", blank=True, null=True)
+                                        verbose_name=_("Structural Divisions"), blank=True, null=True)
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     is_active = models.BooleanField(_("active"), default=False)
 

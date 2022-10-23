@@ -7,15 +7,11 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.core.mail import send_mail
-from django.conf import settings
 from django.utils.translation import gettext_lazy as _
-
 from ReportingTool.forms.completed_work_forms import CompletedWorkForm
 from ReportingTool.models.completed_work import CompletedWork
-from ReportingTool.models.directory import StructuralDivisions, WorksType, Period
+from ReportingTool.models.directory import StructuralDivisions, WorksType
 from django.views.generic import CreateView, UpdateView, DeleteView
-
 from users.models import CustomUser
 
 
@@ -252,9 +248,10 @@ def completed_work_check_filter_view(request):
     struct_division = request.GET.get('struct_division')
 
     # special for worker
+
     worker = request.GET.get('worker')
 
-    if worker and worker != 'Choose...':
+    if worker and worker != _('Choose...') and worker != 'Choose...' and worker != 'Вибрати...':
         middle_name = None
 
         try:
@@ -263,13 +260,14 @@ def completed_work_check_filter_view(request):
                 worker_get_id = CustomUser.objects.get(last_name=last_name,
                                                        first_name=first_name,
                                                        middle_name=middle_name)
-            except  ValueError:
+            except ValueError:
                 worker_get_id = None
 
         except ValueError:
             last_name, first_name = worker.split()
             worker_get_id = CustomUser.objects.get(last_name=last_name,
                                                    first_name=first_name)
+
 
     work_done = request.GET.get('work_done')
 
@@ -288,14 +286,14 @@ def completed_work_check_filter_view(request):
     if is_valid_query_param(period_max):
         qs = qs.filter(period__date__lte=period_max)
 
-    if is_valid_query_param(struct_division) and struct_division != 'Choose...':
+    if is_valid_query_param(struct_division) and struct_division != _('Choose...'):
         qs = qs.filter(worker__struct_division__name=struct_division)
 
-    if worker:
-        if is_valid_query_param(worker) and worker != 'Choose...':
+    if worker and worker != _('Choose...') and worker != 'Choose...' and worker != 'Вибрати...':
+        if is_valid_query_param(worker):
             qs = qs.filter(worker=worker_get_id)
 
-    if is_valid_query_param(work_done) and work_done != 'Choose...':
+    if is_valid_query_param(work_done) and work_done != _('Choose...'):
         qs = qs.filter(work_done__name=work_done).filter(
             Q(worker__struct_division__head=user) |
             Q(worker__struct_division__management_unit__head=user) |
@@ -330,7 +328,7 @@ def trash_filter_view(request):
     # special for worker
     worker = request.GET.get('worker')
 
-    if worker and worker != 'Choose...':
+    if worker and worker != _('Choose...') and worker != 'Choose...' and worker != 'Вибрати...':
         middle_name = None
 
         try:
@@ -364,14 +362,14 @@ def trash_filter_view(request):
     if is_valid_query_param(period_max):
         qs = qs.filter(period__date__lte=period_max)
 
-    if is_valid_query_param(struct_division) and struct_division != 'Choose...':
+    if is_valid_query_param(struct_division) and struct_division != _('Choose...'):
         qs = qs.filter(worker__struct_division__name=struct_division)
 
-    if worker:
-        if is_valid_query_param(worker) and worker != 'Choose...':
+    if worker and worker != _('Choose...') and worker != 'Choose...' and worker != 'Вибрати...':
+        if is_valid_query_param(worker):
             qs = qs.filter(worker=worker_get_id)
 
-    if is_valid_query_param(work_done) and work_done != 'Choose...':
+    if is_valid_query_param(work_done) and work_done != _('Choose...'):
         qs = qs.filter(work_done__name=work_done).filter(
             Q(worker__struct_division__head=user) |
             Q(worker__struct_division__management_unit__head=user) |
@@ -427,7 +425,7 @@ def reports_filter_view(request):
     # special for worker
     worker = request.GET.get('worker')
 
-    if worker and worker != 'Choose...':
+    if worker and worker != _('Choose...') and worker != 'Choose...' and worker != 'Вибрати...':
         middle_name = None
 
         try:
@@ -461,14 +459,14 @@ def reports_filter_view(request):
     if is_valid_query_param(period_max):
         qs = qs.filter(period__date__lte=period_max)
 
-    if is_valid_query_param(struct_division) and struct_division != 'Choose...':
+    if is_valid_query_param(struct_division) and struct_division != _('Choose...'):
         qs = qs.filter(worker__struct_division__name=struct_division)
 
-    if worker:
-        if is_valid_query_param(worker) and worker != 'Choose...':
+    if worker and worker != _('Choose...') and worker != 'Choose...' and worker != 'Вибрати...':
+        if is_valid_query_param(worker):
             qs = qs.filter(worker=worker_get_id)
 
-    if is_valid_query_param(work_done) and work_done != 'Choose...':
+    if is_valid_query_param(work_done) and work_done != _('Choose...'):
         qs = qs.filter(work_done__name=work_done).filter(
             Q(worker__struct_division__head=user) |
             Q(worker__struct_division__management_unit__head=user) |
@@ -487,19 +485,3 @@ def reports_filter_view(request):
         return export_report(request)
 
     return render(request, 'reports_related_struct_unit.html', context)
-
-
-def send_your_email(request):
-    subject = 'Thank you for registering to our site'
-    message = ' it  means a world to us '
-    from_email = settings.EMAIL_HOST_USER
-    recipient_list = ['alexander.shesternenko@gmail.com']
-    send_mail(
-        subject,
-        message,
-        from_email,
-        recipient_list,
-        fail_silently=False
-    )
-
-    return redirect('user_info')

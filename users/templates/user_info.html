@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load static %}
 {% include "header.html" %}
 {% block content %}
@@ -5,7 +6,7 @@
     {% if user.is_authenticated %}
         <div class="page-header">
             <div class="text-center">
-                <h3>Info about {{ user.username }}</h3>
+                <h3>{% trans "Info about" %} {{ user.username }}</h3>
             </div>
         </div>
         <div class="row d-flex justify-content-center">
@@ -13,64 +14,71 @@
             <table class="table table-hover">
                 <thead class="table-dark">
                 <tr>
-                    <th scope="col">Title</th>
-                    <th scope="col">Value</th>
+                    <th scope="col">{% trans "Title" %}</th>
+                    <th scope="col">{% trans "Value" %}</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td>Lastname:</td>
+                    <td>{% trans "Last name" %}:</td>
                     <td>{{ user.last_name }}</td>
                 </tr>
                 <tr>
-                    <td>Firstname:</td>
+                    <td>{% trans "First name" %}:</td>
                     <td>{{ user.first_name }}</td>
                 </tr>
                 <tr>
-                    <td>Middle name:</td>
+                    <td>{% trans "Middle name" %}:</td>
                     <td>{{ user.middle_name }}</td>
                 </tr>
                 <tr>
-                    <td>Email:</td>
+                    <td>{% trans "Email" %}:</td>
                     <td>{{ user.email }}</td>
                 </tr>
                 <tr>
-                    <td>Active:</td>
-                    <td>{{ user.is_active }}</td>
+                    <td>{% trans "Active" %}:</td>
+                    <td>
+
+                        {% if user.is_active %}
+                            {% trans "Yes" %}
+                        {% else %}
+                            {% trans "No" %}
+                        {% endif %}
+                    </td>
                 </tr>
                 <tr>
-                    <td>Data joined:</td>
+                    <td>{% trans "Data joined" %}:</td>
                     <td>{{ user.date_joined }}</td>
                 </tr>
                 <tr>
-                    <td>Profession:</td>
+                    <td>{% trans "Profession" %}:</td>
                     <td>{{ user.profession }}</td>
                 </tr>
                 <tr>
-                    <td>Type of profession:</td>
+                    <td>{% trans "Type of profession" %}:</td>
                     <td>{{ user.profession.category }}</td>
                 </tr>
                 <tr>
-                    <td>Structural division:</td>
+                    <td>{% trans "Structural division" %}:</td>
                     <td>{{ user.struct_division }}</td>
                 </tr>
                 <tr>
-                    <td>Head:</td>
+                    <td>{% trans "Head" %}:</td>
                     <td>{{ user.struct_division.head }}</td>
                 </tr>
                 <tr>
-                    <td>Curator:</td>
+                    <td>{% trans "Curator" %}:</td>
                     <td>{{ user.struct_division.curator }}</td>
                 </tr>
                 <tr>
-                    <td>Password:</td>
-                    <td><a href="{% url 'change_password' %}">Change</a></td>
+                    <td>{% trans "Password" %}:</td>
+                    <td><a href="{% url 'password_change' %}">{% trans "Change" %}</a></td>
                 </tr>
                 </tbody>
             </table>
         </div>
     {% else %}
-        <p>You have no access to this page. Please log in or sing up.</p>
+        <p>{% trans "You have no access to this page. Please log in or sign up" %}.</p>
     {% endif %}
 </div>
 {% endblock content %}

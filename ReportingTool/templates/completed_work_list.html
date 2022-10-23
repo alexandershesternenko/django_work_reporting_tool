@@ -58,8 +58,6 @@
                                             <option value="True">{% trans "Checked" %}</option>
                                             <option value="False">{% trans "Non-checked" %}</option>
                                         </select>
-
-
                                     </div>
                                     <div class="row border border-2 p-2 g-2">
                                         <button type="submit"
@@ -188,7 +186,7 @@
                 });
             </script>
         {% else %}
-            <p>{% trans "Sorry, you are not allowed to access this page" %}</p>
+            <p>{% trans "Sorry, you are not allowed to access this page" %}.</p>
         {% endif %}
     </div>
 {% endblock content %}

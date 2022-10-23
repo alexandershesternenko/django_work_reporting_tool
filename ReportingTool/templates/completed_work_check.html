@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load static %}
 {% include "header.html" %}
 {% block content %}
@@ -9,64 +10,58 @@
             <div class="row g-4">
                 <div class="col-2">
                     <div class="row border border-2 p-2">
-                        <h3>Info</h3>
-                        <p>You see only those completed works that
-                            needed to be checked by {{ user }}.</p>
-                        <p>You can accept, edit or delete record.</p>
-                        <p>You can set different filters.</p>
+                        <h3>{% trans "Info" %}</h3>
+                        <p>{% trans "You see only those completed works that need to be checked by" %} {{ user }}.</p>
+                        <p>{% trans "You can accept, edit or delete record" %}.</p>
+                        <p>{% trans "You can set different filters" %}.</p>
                     </div>
                     <div class="row sticky-top">
                         <form method="GET" , action=".">
                             <div class="row">
                                 <div class="border border-2 p-2 g-2">
-                                    <label for="periodMin">Start date</label>
+                                    <label for="periodMin">{% trans "Start date" %}</label>
                                     <input type="date" class="myselect form-select form-select-sm" id="periodMin"
                                            name="period_min">
-                                    <label for="periodMax">End date</label>
+                                    <label for="periodMax">{% trans "End date" %}</label>
                                     <input type="date" class="myselect form-select form-select-sm" id="periodMax"
                                            name="period_max">
                                 </div>
                                 <div class="border border-2 p-2 g-2">
-                                    <label for="structDivisions">Structural divisions</label>
+                                    <label for="structDivisions">{% trans "Structural division" %}</label>
                                     <select id="structDivisions" class="myselect form-select form-select-sm"
                                             name="struct_division">
-                                        <option selected>
-                                            Choose...
-                                        </option>
+                                        <option selected>{% trans "Choose..." %}</option>
                                         {% for SD in struct_divisions %}
                                             <option value="{{ SD }}">{{ SD }}</option>
                                         {% endfor %}
                                     </select>
-
-                                    <label for="workers">Worker</label>
+                                    <label for="workers">{% trans "Worker" %}</label>
                                     <select id="workers" class="myselect form-select form-select-sm" name="worker">
-                                        <option selected>Choose...</option>
+                                        <option selected>{% trans "Choose..." %}</option>
                                         {% for worker in workers %}
                                             <option value="{{ worker }}">{{ worker }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
                                 <div class="border border-2 p-2 g-2">
-
-                                    <label for="workDone">Work done</label>
+                                    <label for="workDone">{% trans "Work done" %}</label>
                                     <select class="myselect form-select form-select-sm" id="workDone" name="work_done">
-                                        <option selected>Choose...</option>
+                                        <option selected>{% trans "Choose..." %}</option>
                                         {% for work in workstype %}
                                             <option value="{{ work }}">{{ work }}</option>
                                         {% endfor %}
                                     </select>
 
-                                    <label for="scope_min">Scope min</label>
+                                    <label for="scope_min">{% trans "Scope min" %}</label>
                                     <input type="number" min=0 class="myselect form-control form-control-sm"
                                            id="scope_min"
                                            name="work_scope_min">
-
-                                    <label for="scope_max">Scope max</label>
+                                    <label for="scope_max">{% trans "Scope max" %}</label>
                                     <input type="number" min=0 class="myselect form-control form-control-sm"
                                            id="scope_max"
                                            name="work_scope_max">
 
-                                    <label for="notes">Notes contains</label>
+                                    <label for="notes">{% trans "Notes contain" %}</label>
                                     <input type="text" class="myselect form-control form-control-sm" id="notes"
                                            name="work_notes_contains">
                                 </div>
@@ -75,7 +70,7 @@
                                             value="sumbit"
                                             name="button_search"
                                             class="btn btn-outline-secondary  w-100"
-                                            title="Search">
+                                            title="{% trans "Search" %}">
                                         &#128269;
                                     </button>
                                 </div>
@@ -89,15 +84,15 @@
                             <thead class="table-dark">
                             <tr>
                                 <th scope="col" onclick="sortNumber()">&#9650;</th>
-                                <th scope="col" onclick="sortTable(1)">Date &diams;</th>
-                                <th scope="col" onclick="sortTable(2)">Main SD &diams;</th>
-                                <th scope="col" onclick="sortTable(3)">Sub SD &diams;</th>
-                                <th scope="col" onclick="sortTable(4)">Worker &diams;</th>
-                                <th scope="col" onclick="sortTable(5)">Work done &diams;</th>
-                                <th scope="col">Scope</th>
-                                <th scope="col">TimeNorm</th>
-                                <th scope="col">Measure</th>
-                                <th scope="col">Notes</th>
+                                <th scope="col" onclick="sortTable(1)">{% trans "Date" %} &diams;</th>
+                                <th scope="col" onclick="sortTable(2)">{% trans "Main SD" %} &diams;</th>
+                                <th scope="col" onclick="sortTable(3)">{% trans "Sub SD" %} &diams;</th>
+                                <th scope="col" onclick="sortTable(4)">{% trans "Worker" %} &diams;</th>
+                                <th scope="col" onclick="sortTable(5)">{% trans "Work done" %} &diams;</th>
+                                <th scope="col">{% trans "Scope" %}</th>
+                                <th scope="col">{% trans "TimeNorm" %}</th>
+                                <th scope="col">{% trans "Measure" %}</th>
+                                <th scope="col">{% trans "Notes" %}</th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
@@ -118,8 +113,24 @@
                                     <td>{{ record.worker }}</td>
                                     <td>{{ record.work_done }}</td>
                                     <td>{{ record.work_scope }}</td>
-                                    <td>{{ record.work_done.time_norm }}</td>
-                                    <td>{{ record.work_done.measure }}</td>
+                                    <td>
+                                        {% if record.work_done.time_norm %}
+                                            {{ record.work_done.time_norm }}
+                                        {% else %}
+                                            {% trans "none" %}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if record.work_done.measure.name == "times" %}
+                                            {% trans "times" %}
+                                        {% elif record.work_done.measure.name == "running meters" %}
+                                            {% trans "running meters" %}
+                                        {% elif record.work_done.measure.name == "pieces" %}
+                                            {% trans "pieces" %}
+                                        {% else %}
+                                            {% trans "none" %}
+                                        {% endif %}
+                                    </td>
                                     <td>{{ record.work_notes }}</td>
                                     {% if user.is_head %}
                                         <td>
@@ -128,7 +139,7 @@
                                                 <button style="height:40px;width:40px"
                                                         type="submit" value="sumbit"
                                                         class="btn btn-outline-success"
-                                                        title="Accept record">
+                                                        title="{% trans "Accept record" %}">
                                                     &#10003;
                                                 </button>
                                             </form>
@@ -139,7 +150,7 @@
                                                     onclick=
                                                             "location.href=
                                                                     '{% url 'completed_work_edit' record.pk %}'"
-                                                    title="Edit record">
+                                                    title="{% trans "Edit record" %}">
                                                 &#128393;
                                             </button>
                                         </td>
@@ -148,7 +159,7 @@
                                                     onclick=
                                                             "location.href=
                                                                     '{% url 'completed_work_delete' record.pk %}'"
-                                                    title="Delete record">
+                                                    title="{% trans "Delete record" %}">
                                                 &#65794;
                                             </button>
                                         </td>
@@ -162,7 +173,7 @@
                             </tbody>
                         </table>
                     {% else %}
-                        <p>No record to show.</p>
+                        <p>{% trans "No records to show" %}.</p>
                     {% endif %}
                 </div>
             </div>
@@ -188,7 +199,7 @@
             });
         </script>
     {% else %}
-        <p>Sorry, you are not allowed to access this page</p>
+        <p>{% trans "Sorry, you are not allowed to access this page" %}.</p>
     {% endif %}
 {% endblock content %}
 {% include "footer.html" %}

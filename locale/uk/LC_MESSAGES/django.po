@@ -304,7 +304,7 @@ msgstr "Електронна пошта"
 
 #: .\users\models.py:30
 msgid "Structural Divisions"
-msgstr "Структурний підрозділ"
+msgstr "Структурні підрозділи"
 
 #: .\users\models.py:31
 msgid "date joined"
@@ -1088,51 +1088,51 @@ msgstr ""
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:25
 msgid "January"
-msgstr ""
+msgstr "Січень"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:26
 msgid "February"
-msgstr ""
+msgstr "Лютий"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:27
 msgid "March"
-msgstr ""
+msgstr "Март"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:28
 msgid "April"
-msgstr ""
+msgstr "Квітень"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:29
 msgid "May"
-msgstr ""
+msgstr "Травень"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:30
 msgid "June"
-msgstr ""
+msgstr "Червень"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:31
 msgid "July"
-msgstr ""
+msgstr "Липень"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:32
 msgid "August"
-msgstr ""
+msgstr "Серпень"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:33
 msgid "September"
-msgstr ""
+msgstr "Вересень"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:34
 msgid "October"
-msgstr ""
+msgstr "Жовтень"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:35
 msgid "November"
-msgstr ""
+msgstr "Листопад"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:36
 msgid "December"
-msgstr ""
+msgstr "Грудень"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:39
 msgid "jan"
@@ -1245,62 +1245,62 @@ msgstr ""
 #: .\venv\Lib\site-packages\django\utils\dates.py:67
 msgctxt "alt. month"
 msgid "January"
-msgstr ""
+msgstr "Січня"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:68
 msgctxt "alt. month"
 msgid "February"
-msgstr ""
+msgstr "Лютого"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:69
 msgctxt "alt. month"
 msgid "March"
-msgstr ""
+msgstr "Березня"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:70
 msgctxt "alt. month"
 msgid "April"
-msgstr ""
+msgstr "Квітня"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:71
 msgctxt "alt. month"
 msgid "May"
-msgstr ""
+msgstr "Травня"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:72
 msgctxt "alt. month"
 msgid "June"
-msgstr ""
+msgstr "Червня"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:73
 msgctxt "alt. month"
 msgid "July"
-msgstr ""
+msgstr "Липня"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:74
 msgctxt "alt. month"
 msgid "August"
-msgstr ""
+msgstr "Серпня"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:75
 msgctxt "alt. month"
 msgid "September"
-msgstr ""
+msgstr "Вересня"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:76
 msgctxt "alt. month"
 msgid "October"
-msgstr ""
+msgstr "Жовтня"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:77
 msgctxt "alt. month"
 msgid "November"
-msgstr ""
+msgstr "Листопада"
 
 #: .\venv\Lib\site-packages\django\utils\dates.py:78
 msgctxt "alt. month"
 msgid "December"
-msgstr ""
+msgstr "Грудня"
 
 #: .\venv\Lib\site-packages\django\utils\ipv6.py:8
 msgid "This is not a valid IPv6 address."
@@ -1314,7 +1314,7 @@ msgstr ""
 
 #: .\venv\Lib\site-packages\django\utils\text.py:252
 msgid "or"
-msgstr ""
+msgstr "або"
 
 #. Translators: This string is used as a separator between list elements
 #: .\venv\Lib\site-packages\django\utils\text.py:271
@@ -1535,3 +1535,90 @@ msgstr ""
 #, python-format
 msgid " By %(filter_title)s "
 msgstr ""
+
+msgid "Info about"
+msgstr "Інформація про"
+
+msgid "Title"
+msgstr "Найменування"
+
+msgid "Value"
+msgstr "Значення"
+
+msgid "Active"
+msgstr "Активний"
+
+msgid "Data joined"
+msgstr "Дата приєднання"
+
+msgid "Type of profession"
+msgstr "Тип професії"
+
+msgid "Head"
+msgstr "Керівник"
+
+msgid "Curator"
+msgstr "Куратор"
+
+msgid "You have no access to this page. Please log in or sign up"
+msgstr "У вас немає доступу до цієї сторінки. Увійдіть або зареєструйтеся"
+
+msgid "Update password"
+msgstr "Оновити пароль"
+
+msgid "You can accept, edit or delete record"
+msgstr "Ви можете затвердити, редагувати або видалити запис"
+
+msgid "Accept record"
+msgstr "Затвердити запис"
+
+msgid "You see only those completed works that need to be checked by"
+msgstr "Ви бачите лише ті виконані роботи, які потребують перевірки"
+
+msgid "Structural division"
+msgstr "Структурний підрозділ"
+
+msgid "You can save the results to file"
+msgstr "Ви можете зберегти результати у файл"
+
+msgid "You see only those completed works that are confirmed by the heads of structural divisions and are available for display to the"
+msgstr "Ви бачите лише ті виконані роботи, які підтверджені керівниками структурних підрозділів і доступні для показу для"
+
+msgid "Export to CSV"
+msgstr "Експортувати в CSV"
+
+msgid "Reject record"
+msgstr "Відхилити запис"
+
+msgid "As an admin, you see all records that have been deleted. You can restore them"
+msgstr "Як адміністратор ви бачите всі записи, які були видалені. Ви можете відновити їх"
+
+msgid "Restore record"
+msgstr "Відновити запис"
+
+msgid "Thank you for your email confirmation. Now you can log in to your account."
+msgstr "Дякуємо за підтвердження електронною поштою. Тепер ви можете увійти у свій обліковий запис."
+
+msgid "Activation link is invalid!"
+msgstr "Посилання для активації недійсне!"
+
+msgid "Activate your account"
+msgstr "Активуйте свій акаунт"
+
+msgid "Dear"
+msgstr "Шановний"
+
+msgid "please go to you email"
+msgstr "будь ласка, перейдіть на свою електронну адресу"
+
+msgid "You must pass the reCAPTCHA test"
+msgstr "Ви повинні пройти тест reCAPTCHA"
+
+msgid "Forgotten your password? Enter your email address below, and we'll email instructions for setting up a new one"
+msgstr "Забули свій пароль? Введіть свою електронну адресу нижче, і ми надішлемо електронною поштою інструкції щодо налаштування нового"
+
+msgid "Send to email"
+msgstr "Надіслати на пошту"
+
+msgid "You need to"
+msgstr "Вам необхідно"

@@ -27,7 +27,7 @@ class CustomUser(AbstractUser, PermissionsMixin):
                                    verbose_name=_("Profession"), blank=True, null=True)
     struct_division = models.ForeignKey(directory.StructuralDivisions,
                                         on_delete=models.SET('deleted structural division'),
-                                        verbose_name=_("Structural Divisions"), blank=True, null=True)
+                                        verbose_name=_("Structural division"), blank=True, null=True)
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     is_active = models.BooleanField(_("active"), default=False)
 

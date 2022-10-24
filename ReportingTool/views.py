@@ -131,29 +131,32 @@ def export_report(request):
     response = HttpResponse(content_type='text/csv')
     writer = csv.writer(response)
     writer.writerow([
-        'id',
+        'record_id',
+        'count',
         'Date',
         'Main SD',
         'SD',
         'Worker',
-        'Type of work done',
+        'Work done',
         'Scope',
+        'Measure',
         'Notes',
-        'Checked'
     ])
+    count = 1
+    for record in CompletedWork.objects.all():
+        writer.writerow([record.pk,
+                         count,
+                         record.period,
+                         record.worker.struct_division.management_unit,
+                         record.worker.struct_division,
+                         record.worker,
+                         record.work_done,
+                         record.work_scope,
+                         record.work_done.measure,
+                         record.work_notes,
+                         ])
+        count += 1
 
-    for record in CompletedWork.objects.all().values_list(
-            'work_done_id',
-            'period__date',
-            'worker__struct_division__management_unit__name',
-            'worker__struct_division__name',
-            'worker__last_name',
-            'work_done__name',
-            'work_scope',
-            'work_notes',
-            'checked_by_head'
-    ):
-        writer.writerow(record)
 
     response['Content-Disposition'] = 'attachment; filename="completed_work_list.csv"'
     return response

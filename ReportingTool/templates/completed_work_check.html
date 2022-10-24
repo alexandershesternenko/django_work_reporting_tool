@@ -131,7 +131,13 @@
                                             {% trans "none" %}
                                         {% endif %}
                                     </td>
-                                    <td>{{ record.work_notes }}</td>
+                                    <td>
+                                            {% if record.work_notes %}
+                                                {{ record.work_notes }}
+                                            {% else %}
+                                                {% trans "none" %}
+                                            {% endif %}
+                                        </td>
                                     {% if user.is_head %}
                                         <td>
                                             <form method="post" action="{% url 'completed_work_accept' record.pk %}">

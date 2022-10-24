@@ -125,7 +125,13 @@
                                                 {% trans "none" %}
                                             {% endif %}
                                         </td>
-                                        <td>{{ record.work_notes }}</td>
+                                        <td>
+                                            {% if record.work_notes %}
+                                                {{ record.work_notes }}
+                                            {% else %}
+                                                {% trans "none" %}
+                                            {% endif %}
+                                        </td>
                                         <td>
                                             {% if record.checked_by_head %}
                                                 {% trans "Yes" %}

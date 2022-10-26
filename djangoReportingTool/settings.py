@@ -11,7 +11,7 @@ from pathlib import Path
 
 import dj_database_url
 
-from djangoReportingTool import local_settings
+# from djangoReportingTool import local_settings
 import os
 from django.utils.translation import gettext_lazy as _
 

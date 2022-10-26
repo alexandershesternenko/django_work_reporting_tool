@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath djangoReportingTool.wsgi --log-file
+web: gunicorn --pythonpath djangoReportingTool.wsgi

@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', '1')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
-ALLOWED_HOSTS = ['djangoreportingtool.herokuapp.com/','127.0.0.1']
+ALLOWED_HOSTS = ['djangoreportingtool.herokuapp.com','127.0.0.1']
 
 
 # Application definition
@@ -161,11 +161,11 @@ AUTH_USER_MODEL = 'users.CustomUser'
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 MEDIA_URL = 'media/'
-STATIC_URL = 'static/'
+# STATIC_URL = 'static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

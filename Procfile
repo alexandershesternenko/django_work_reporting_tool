@@ -1,0 +1,1 @@
+web: gunicorn djangoReportingTool.wsgi --log-file

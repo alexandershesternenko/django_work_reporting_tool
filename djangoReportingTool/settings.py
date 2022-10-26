@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', local_settings.SECRET_KEY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['djangoreportingtool.herokuapp.com/','127.0.0.1']
 
 
 # Application definition
@@ -51,6 +51,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -85,14 +86,25 @@ WSGI_APPLICATION = 'djangoReportingTool.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'db_for_work_report_tool',
+#         'USER': 'postgres',
+#         'PASSWORD': '36334200',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'db_for_work_report_tool',
-        'USER': 'postgres',
-        'PASSWORD': '36334200',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': os.environ.get('POSTGRES_HOST', local_settings.POSTGRES_HOST),
+        'NAME': os.environ.get('POSTGRES_DB', local_settings.POSTGRES_DB),
+        'USER': os.environ.get('POSTGRES_USER', local_settings.POSTGRES_USER),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', local_settings.POSTGRES_PASSWORD),
+        'PORT': os.environ.get('POSTGRES_PORT', local_settings.POSTGRES_PORT),
     }
 }
 

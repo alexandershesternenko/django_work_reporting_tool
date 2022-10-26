@@ -24,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', local_settings.SECRET_KEY)
+# SECRET_KEY = os.environ.get('SECRET_KEY', local_settings.SECRET_KEY)
+SECRET_KEY = os.getenv('SECRET_KEY', '1')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
@@ -104,11 +105,11 @@ WSGI_APPLICATION = 'djangoReportingTool.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.environ.get('POSTGRES_HOST', local_settings.POSTGRES_HOST),
-        'NAME': os.environ.get('POSTGRES_DB', local_settings.POSTGRES_DB),
-        'USER': os.environ.get('POSTGRES_USER', local_settings.POSTGRES_USER),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', local_settings.POSTGRES_PASSWORD),
-        'PORT': os.environ.get('POSTGRES_PORT', local_settings.POSTGRES_PORT),
+        'HOST': os.environ.get('POSTGRES_HOST', '1'),
+        'NAME': os.environ.get('POSTGRES_DB','1'),
+        'USER': os.environ.get('POSTGRES_USER', '1'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', '1'),
+        'PORT': os.environ.get('POSTGRES_PORT', '1'),
     }
 }
 
@@ -175,8 +176,8 @@ LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'login'
 
 
-RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY', local_settings.RECAPTCHA_PUBLIC_KEY)
-RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY', local_settings.RECAPTCHA_PRIVATE_KEY)
+RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY', '1')
+RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY', '1')
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
 
@@ -185,7 +186,7 @@ EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', local_settings.EMAIL_HOST_USER)
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', local_settings.EMAIL_HOST_PASSWORD)
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '1')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '1')
 
 PASSWORD_RESET_TIMEOUT = 14400

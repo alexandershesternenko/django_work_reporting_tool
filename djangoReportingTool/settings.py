@@ -11,7 +11,7 @@ from pathlib import Path
 
 import dj_database_url
 
-# from djangoReportingTool import local_settings
+from djangoReportingTool import local_settings
 import os
 from django.utils.translation import gettext_lazy as _
 
@@ -25,8 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.environ.get('SECRET_KEY', local_settings.SECRET_KEY)
-SECRET_KEY = os.getenv('SECRET_KEY', '1')
+SECRET_KEY = os.environ.get('SECRET_KEY', local_settings.SECRET_KEY)
+# SECRET_KEY = os.getenv('SECRET_KEY', '1')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
@@ -164,7 +164,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -178,7 +178,7 @@ LOGOUT_REDIRECT_URL = 'login'
 
 
 RECAPTCHA_PUBLIC_KEY = '6Lf6YHciAAAAAE6jKtxm-WgRhYJCWbwELlACigxl'
-RECAPTCHA_PRIVATE_KEY = '6Lf6YHciAAAAAFKYwYmbeyP0TOYgdxasv1W3Kg8v'
+RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY', local_settings.RECAPTCHA_PRIVATE_KEY)
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
 

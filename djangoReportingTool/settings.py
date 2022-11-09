@@ -90,27 +90,19 @@ TEMPLATES = [
 WSGI_APPLICATION = 'djangoReportingTool.wsgi.application'
 
 
+# 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'db_for_work_report_tool',
-        'USER': 'postgres',
-        'PASSWORD': '36334200',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': os.environ.get('POSTGRES_HOST', local_settings.POSTGRES_HOST),
+        'NAME': os.environ.get('POSTGRES_DB', local_settings.POSTGRES_DB),
+        'USER': os.environ.get('POSTGRES_USER', local_settings.POSTGRES_USER),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', local_settings.POSTGRES_PASSWORD),
+        'PORT': os.environ.get('POSTGRES_PORT', local_settings.POSTGRES_PORT),
     }
 }
-# for heroku
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'HOST': os.environ.get('POSTGRES_HOST'),
-#         'NAME': os.environ.get('POSTGRES_DB'),
-#         'USER': os.environ.get('POSTGRES_USER'),
-#         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-#         'PORT': os.environ.get('POSTGRES_PORT'),
-#     }
-# }
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
@@ -177,7 +169,7 @@ LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'login'
 
 
-RECAPTCHA_PUBLIC_KEY = '6Lf6YHciAAAAAE6jKtxm-WgRhYJCWbwELlACigxl'
+RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY', local_settings.RECAPTCHA_PUBLIC_KEY)
 RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY', local_settings.RECAPTCHA_PRIVATE_KEY)
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
